@@ -1,9 +1,11 @@
 import nx from '@nx/eslint-plugin';
+import angularEslint from 'angular-eslint';
 
 export default [
   ...nx.configs['flat/base'],
   ...nx.configs['flat/typescript'],
   ...nx.configs['flat/javascript'],
+  ...angularEslint.configs.tsRecommended,
   {
     ignores: ['**/dist'],
   },
@@ -30,7 +32,7 @@ export default [
         'error',
         {
           type: 'attribute',
-          prefix: 'app',
+          prefix: 'sms',
           style: 'camelCase',
         },
       ],
@@ -38,7 +40,7 @@ export default [
         'error',
         {
           type: 'element',
-          prefix: 'app',
+          prefix: 'sms',
           style: 'kebab-case',
         },
       ],

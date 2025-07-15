@@ -3,9 +3,10 @@
     "moduleResolution": "bundler",
     "emitDecoratorMetadata": false,
     "target": "es2022",
-    "module": "preserve",
+    "module": "esnext",
     "lib": ["es2020", "dom"],
     "paths": {},
+    "skipLibCheck": true,
     "isolatedModules": true
   },
   "angularCompilerOptions": {
