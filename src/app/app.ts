@@ -37,7 +37,7 @@ export class App {
   protected title = 'surviving-mars-stats';
 
   protected canvasCamera: NgtCameraParameters = {
-    position: [0, 0, 18],
+    position: [0, 0, 14],
   };
   protected canvasLookAt: NgtVector3 = [0, 0, 0];
 }

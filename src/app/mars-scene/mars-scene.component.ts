@@ -8,22 +8,28 @@ import {
 import {
   beforeRender,
   extend,
+  loaderResource,
   NgtArgs,
   NgtVector3,
 } from 'angular-three';
 import { textureResource } from 'angular-three-soba/loaders';
 import { NgtsEnvironment } from 'angular-three-soba/staging';
+import marsFragmentShader from '../shaders/mars/marsFragment.glsl';
+import marsVertexShader from '../shaders/mars/marsVertex.glsl';
 
 import {
   Color,
+  DoubleSide,
   HemisphereLight,
   Mesh,
   MeshStandardMaterial,
   MeshStandardMaterialParameters,
+  ShaderMaterial,
+  ShaderMaterialParameters,
   SphereGeometry,
 } from 'three';
 
-extend({ Color, Mesh, SphereGeometry, MeshStandardMaterial });
+extend({ Color, Mesh, SphereGeometry, MeshStandardMaterial, ShaderMaterial });
 
 /**
  * - `CUSTOM_ELEMENTS_SCHEMA` is required to use Angular Three elements in the
@@ -46,16 +52,33 @@ extend({ Color, Mesh, SphereGeometry, MeshStandardMaterial });
       />
 
       @let _textures = marsTextures.value();
-      @let map = _textures?.map;
+      <!-- @let map = _textures?.map;
       @let normalMap = _textures?.normalMap;
-      @let bumpMap = _textures?.bumpMap;
+      @let bumpMap = _textures?.bumpMap; -->
 
-      <ngt-mesh-standard-material
+      <!-- <ngt-mesh-standard-material
         [map]="map"
         [normalMap]="normalMap"
         [bumpMap]="bumpMap"
         [parameters]="meshMatParams"
-      />
+      /> -->
+
+      @if (_textures) {
+      <ngt-shader-material [parameters]="shaderParameters">
+        <!-- <ngt-value
+          attach="uniforms.diffuseTexture.value"
+          [rawValue]="_textures.map"
+        /> -->
+        <ngt-value
+          attach="uniforms"
+          [rawValue]="{
+            diffuseTexture: { value: _textures.map },
+            normalTexture: { value: _textures.normalMap },
+            bumpTexture: { value: _textures.bumpMap }
+          }"
+        />
+      </ngt-shader-material>
+      }
 
       <ngts-environment [options]="{ preset: 'sunset' }" />
     </ngt-mesh>
@@ -93,11 +116,34 @@ export class MarsScene {
 
   protected marsTextures = textureResource(() => ({
     // map: './textures/8k_mars.jpg',
-    // bumpMap: './textures/mars_4k_topo.jpg',
+    // bumpMap: './textures/8k_topo.jpg',
     map: './textures/mars_4k_color.jpg',
     bumpMap: './textures/mars_4k_topo.jpg',
-    normalMap: './textures/mars_4k_normal.jpg'
+    normalMap: './textures/mars_4k_normal.jpg',
   }));
+
+  protected shaderParameters: ShaderMaterialParameters = {
+    vertexShader: marsVertexShader,
+    fragmentShader: marsFragmentShader,
+    side: DoubleSide,
+    uniforms: {
+      /**
+       * The fragment shader has defined `diffuseTexture` as an "Uniform"
+       * qualifier. Initially we set as `null` as the `textureResource` is
+       * async, then use either `effect()` or conditional `@if` at the template.
+       */
+      diffuseTexture: {
+        value: null,
+        // value: this.marsTextures.value()?.map,
+      },
+      normalTexture: {
+        value: null,
+      },
+      bumpTexture: {
+        value: null,
+      }
+    },
+  };
 
   /* -------------------- ANIMATION RELATED CONFIG -------------------- */
 
@@ -126,7 +172,7 @@ export class MarsScene {
     const sphereMeshEl = this.sphereMeshRef().nativeElement;
     /** The tilt angle. */
     sphereMeshEl.rotation.z = this._marsTiltAngle;
-    /** 
+    /**
      * A bit of rotation as every planet does. In this case, small rotation in
      * the Y axis.
      */
