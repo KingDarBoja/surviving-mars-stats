@@ -3,10 +3,17 @@ import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
   ElementRef,
-  input,
   viewChild,
 } from '@angular/core';
-import { beforeRender, extend, NgtArgs, NgtVector3 } from 'angular-three';
+import {
+  beforeRender,
+  extend,
+  NgtArgs,
+  NgtVector3,
+} from 'angular-three';
+import { textureResource } from 'angular-three-soba/loaders';
+import { NgtsEnvironment } from 'angular-three-soba/staging';
+
 import {
   Color,
   HemisphereLight,
@@ -27,10 +34,10 @@ extend({ Color, Mesh, SphereGeometry, MeshStandardMaterial });
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   //   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgtArgs],
+  imports: [NgtArgs, NgtsEnvironment],
   template: `
     <ngt-color attach="background" *args="sceneColorArgs" />
-    <ngt-hemisphere-light *args="hemiLightArgs" />
+    <!-- <ngt-hemisphere-light *args="hemiLightArgs" /> -->
 
     <ngt-mesh #sphereMeshRef [position]="meshPosition">
       <ngt-sphere-geometry
@@ -38,7 +45,19 @@ extend({ Color, Mesh, SphereGeometry, MeshStandardMaterial });
         (attached)="onAttachSphere($event)"
       />
 
-      <ngt-mesh-standard-material [parameters]="meshMatParams" />
+      @let _textures = marsTextures.value();
+      @let map = _textures?.map;
+      @let normalMap = _textures?.normalMap;
+      @let bumpMap = _textures?.bumpMap;
+
+      <ngt-mesh-standard-material
+        [map]="map"
+        [normalMap]="normalMap"
+        [bumpMap]="bumpMap"
+        [parameters]="meshMatParams"
+      />
+
+      <ngts-environment [options]="{ preset: 'sunset' }" />
     </ngt-mesh>
   `,
 })
@@ -62,15 +81,23 @@ export class MarsScene {
   /* -------------------- MESH RELATED CONFIG -------------------- */
   protected meshPosition: NgtVector3 = [0, 0, 0];
   protected meshMatParams: MeshStandardMaterialParameters = {
-    color: 0xbd5417, // Orange-redish
+    // color: 0xbd5417, // Orange-redish
     wireframe: false,
     flatShading: false,
   };
 
   /* -------------------- GEOMETRY RELATED CONFIG -------------------- */
   protected sphereGeoArgs: ConstructorParameters<typeof SphereGeometry> = [
-    8, 32, 32,
+    8, 64, 64,
   ];
+
+  protected marsTextures = textureResource(() => ({
+    // map: './textures/8k_mars.jpg',
+    // bumpMap: './textures/mars_4k_topo.jpg',
+    map: './textures/mars_4k_color.jpg',
+    bumpMap: './textures/mars_4k_topo.jpg',
+    normalMap: './textures/mars_4k_normal.jpg'
+  }));
 
   /* -------------------- ANIMATION RELATED CONFIG -------------------- */
 
@@ -99,6 +126,10 @@ export class MarsScene {
     const sphereMeshEl = this.sphereMeshRef().nativeElement;
     /** The tilt angle. */
     sphereMeshEl.rotation.z = this._marsTiltAngle;
+    /** 
+     * A bit of rotation as every planet does. In this case, small rotation in
+     * the Y axis.
+     */
     sphereMeshEl.rotateY(0.0001);
   }
 }
