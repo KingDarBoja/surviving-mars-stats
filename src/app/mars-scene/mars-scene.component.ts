@@ -8,7 +8,6 @@ import {
 import {
   beforeRender,
   extend,
-  loaderResource,
   NgtArgs,
   NgtVector3,
 } from 'angular-three';
@@ -16,8 +15,12 @@ import { textureResource } from 'angular-three-soba/loaders';
 import { NgtsEnvironment } from 'angular-three-soba/staging';
 import marsFragmentShader from '../shaders/mars/marsFragment.glsl';
 import marsVertexShader from '../shaders/mars/marsVertex.glsl';
+import atmosphereFragmentShader from '../shaders/atmosphere/atmosphereFragment.glsl';
+import atmosphereVertexShader from '../shaders/atmosphere/atmosphereVertex.glsl';
 
 import {
+  AdditiveBlending,
+  BackSide,
   Color,
   DoubleSide,
   HemisphereLight,
@@ -43,7 +46,8 @@ extend({ Color, Mesh, SphereGeometry, MeshStandardMaterial, ShaderMaterial });
   imports: [NgtArgs, NgtsEnvironment],
   template: `
     <ngt-color attach="background" *args="sceneColorArgs" />
-    <!-- <ngt-hemisphere-light *args="hemiLightArgs" /> -->
+    <ngt-hemisphere-light *args="hemiLightArgs" />
+    <!-- <ngts-environment [options]="{ preset: 'sunset' }" /> -->
 
     <ngt-mesh #sphereMeshRef [position]="meshPosition">
       <ngt-sphere-geometry
@@ -64,11 +68,7 @@ extend({ Color, Mesh, SphereGeometry, MeshStandardMaterial, ShaderMaterial });
       /> -->
 
       @if (_textures) {
-      <ngt-shader-material [parameters]="shaderParameters">
-        <!-- <ngt-value
-          attach="uniforms.diffuseTexture.value"
-          [rawValue]="_textures.map"
-        /> -->
+      <ngt-shader-material [parameters]="marsShaderParameters">
         <ngt-value
           attach="uniforms"
           [rawValue]="{
@@ -80,7 +80,10 @@ extend({ Color, Mesh, SphereGeometry, MeshStandardMaterial, ShaderMaterial });
       </ngt-shader-material>
       }
 
-      <ngts-environment [options]="{ preset: 'sunset' }" />
+      <ngt-mesh #atmosphereMeshRef [position]="meshPosition">
+        <ngt-sphere-geometry *args="sphereGeoArgs"/>
+        <ngt-shader-material [parameters]="atmosphereShaderParameters" />
+      </ngt-mesh>
     </ngt-mesh>
   `,
 })
@@ -122,7 +125,7 @@ export class MarsScene {
     normalMap: './textures/mars_4k_normal.jpg',
   }));
 
-  protected shaderParameters: ShaderMaterialParameters = {
+  protected marsShaderParameters: ShaderMaterialParameters = {
     vertexShader: marsVertexShader,
     fragmentShader: marsFragmentShader,
     side: DoubleSide,
@@ -145,10 +148,19 @@ export class MarsScene {
     },
   };
 
+  protected atmosphereShaderParameters: ShaderMaterialParameters = {
+    vertexShader: atmosphereVertexShader,
+    fragmentShader: atmosphereFragmentShader,
+    side: BackSide,
+    blending: AdditiveBlending,
+  };
+
   /* -------------------- ANIMATION RELATED CONFIG -------------------- */
 
   /** Obtain the mesh reference with `viewChild` signal. */
   sphereMeshRef = viewChild.required<ElementRef<Mesh>>('sphereMeshRef');
+  atmosphereMeshRef = viewChild.required<ElementRef<Mesh>>('atmosphereMeshRef');
+
 
   onAttachSphere({ node, parent }: { node: SphereGeometry; parent: Mesh }) {
     console.log('Sphere node: ', node);
@@ -169,6 +181,10 @@ export class MarsScene {
    * Perform all animation related to our sphere here.
    */
   private animateSphere() {
+    /** Slighty scale the atmosphere mesh. */
+    const atmosphereMeshEl = this.atmosphereMeshRef().nativeElement;
+    atmosphereMeshEl.scale.set(1.1, 1.1, 1.1);
+
     const sphereMeshEl = this.sphereMeshRef().nativeElement;
     /** The tilt angle. */
     sphereMeshEl.rotation.z = this._marsTiltAngle;
