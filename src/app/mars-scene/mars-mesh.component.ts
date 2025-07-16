@@ -16,6 +16,9 @@ import { textureResource } from 'angular-three-soba/loaders';
 import {
   DoubleSide,
   Mesh,
+  MeshStandardMaterial,
+  MeshStandardMaterialParameters,
+  MultiplyBlending,
   ShaderMaterial,
   ShaderMaterialParameters,
   SphereGeometry,
@@ -24,7 +27,7 @@ import {
 import marsFragmentShader from '../shaders/mars/marsFragment.glsl';
 import marsVertexShader from '../shaders/mars/marsVertex.glsl';
 
-extend({ Mesh, SphereGeometry, ShaderMaterial });
+extend({ Mesh, SphereGeometry, MeshStandardMaterial, ShaderMaterial });
 
 @Component({
   selector: 'sms-mars-mesh',
@@ -32,6 +35,12 @@ extend({ Mesh, SphereGeometry, ShaderMaterial });
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   standalone: true,
   template: `
+    <!-- This mesh allows shadows from the directional light. -->
+    <ngt-mesh [position]="[0, 0, 0]">
+      <ngt-sphere-geometry *args="overlayGeoArgs" />
+      <ngt-mesh-standard-material [parameters]="overlayMeshMatParams" />
+    </ngt-mesh>
+
     <ngt-mesh #mesh [position]="position()">
       <ngt-sphere-geometry
         *args="geometryArgs"
@@ -72,13 +81,43 @@ export class MarsMeshComponent {
    */
   position = input<NgtVector3>([0, 0, 0]);
 
+  /** Height and width segments. */
+  private readonly sphereSegments = 64;
+  private readonly sphereRadius = 8;
+
   /**
    * Geometry arguments, in this case: [radius, widthSegments,
    * heightSegments].
    */
   protected geometryArgs: ConstructorParameters<typeof SphereGeometry> = [
-    8, 64, 64,
+    this.sphereRadius,
+    this.sphereSegments,
+    this.sphereSegments,
   ];
+
+  /**
+   * This geometry is almost the same as the base sphere, but slighty bigger
+   * radius to overlay.
+   */
+  protected overlayGeoArgs: ConstructorParameters<typeof SphereGeometry> = [
+    this.sphereRadius + 0.05,
+    this.sphereSegments,
+    this.sphereSegments,
+  ];
+
+  /** 
+   * The overlay to properly cast a shadow from the lightings.This also applies
+   * an overlay colour.
+   */
+  protected overlayMeshMatParams: MeshStandardMaterialParameters = {
+    color: 0xbd5417, // Orange-redish
+    wireframe: false,
+    flatShading: false,
+    transparent: true,
+    opacity: 0.5,
+    premultipliedAlpha: true,
+    blending: MultiplyBlending,
+  };
 
   /** */
   private meshRef = viewChild.required<ElementRef<Mesh>>('mesh');
@@ -131,7 +170,7 @@ export class MarsMeshComponent {
    */
   private animate() {
     const sphereMeshEl = this.meshRef().nativeElement;
-    sphereMeshEl.rotateY(0.0001);
+    sphereMeshEl.rotateY(0.0002);
   }
 
   /**

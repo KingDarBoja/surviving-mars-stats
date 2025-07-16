@@ -8,8 +8,6 @@ import {
   HemisphereLight,
   Mesh,
   MeshStandardMaterial,
-  MeshStandardMaterialParameters,
-  MultiplyBlending,
   SphereGeometry,
 } from 'three';
 import { MarsMeshComponent } from './mars-mesh.component';
@@ -36,11 +34,6 @@ extend({ Color, Group, Mesh, SphereGeometry, MeshStandardMaterial });
     <!-- <ngt-hemisphere-light *args="hemiLightArgs" /> -->
 
     <ngt-group #marsMeshGroup>
-      <ngt-mesh [position]="[0, 0, 0]">
-        <ngt-sphere-geometry *args="[8.05, 32, 32]" />
-        <ngt-mesh-standard-material [parameters]="meshMatParams" />
-      </ngt-mesh>
-
       <sms-mars-mesh />
       <sms-atmosphere-mesh />
     </ngt-group>
@@ -66,16 +59,6 @@ export class MarsScene {
   ];
   protected sunLightArgs: ConstructorParameters<typeof DirectionalLight> = [0xffffff, 12];
   protected sunLightPosition: NgtVector3 = [-1.4, 0, 0.8];
-
-  protected meshMatParams: MeshStandardMaterialParameters = {
-    color: 0xbd5417, // Orange-redish
-    wireframe: false,
-    flatShading: false,
-    transparent: true,
-    opacity: 0.5,
-    premultipliedAlpha: true,
-    blending: MultiplyBlending,
-  };
 
   /* -------------------- ANIMATION CONFIG -------------------- */
 
