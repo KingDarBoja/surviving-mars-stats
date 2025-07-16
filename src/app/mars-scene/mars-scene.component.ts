@@ -1,38 +1,18 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  CUSTOM_ELEMENTS_SCHEMA,
-  ElementRef,
-  viewChild,
-} from '@angular/core';
-import {
-  beforeRender,
-  extend,
-  NgtArgs,
-  NgtVector3,
-} from 'angular-three';
-import { textureResource } from 'angular-three-soba/loaders';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { extend, NgtArgs } from 'angular-three';
 import { NgtsEnvironment } from 'angular-three-soba/staging';
-import marsFragmentShader from '../shaders/mars/marsFragment.glsl';
-import marsVertexShader from '../shaders/mars/marsVertex.glsl';
-import atmosphereFragmentShader from '../shaders/atmosphere/atmosphereFragment.glsl';
-import atmosphereVertexShader from '../shaders/atmosphere/atmosphereVertex.glsl';
 
 import {
-  AdditiveBlending,
-  BackSide,
   Color,
-  DoubleSide,
   HemisphereLight,
   Mesh,
-  MeshStandardMaterial,
-  MeshStandardMaterialParameters,
   ShaderMaterial,
-  ShaderMaterialParameters,
   SphereGeometry,
 } from 'three';
+import { MarsMeshComponent } from './mars-mesh.component';
+import { MarsAtmosphereMeshComponent } from './mars-atmosphere-mesh.component';
 
-extend({ Color, Mesh, SphereGeometry, MeshStandardMaterial, ShaderMaterial });
+extend({ Color, Mesh, SphereGeometry, ShaderMaterial });
 
 /**
  * - `CUSTOM_ELEMENTS_SCHEMA` is required to use Angular Three elements in the
@@ -41,50 +21,21 @@ extend({ Color, Mesh, SphereGeometry, MeshStandardMaterial, ShaderMaterial });
 @Component({
   selector: 'sms-mars-scene',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  //   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgtArgs, NgtsEnvironment],
+  standalone: true,
+  imports: [
+    NgtArgs,
+    NgtsEnvironment,
+    MarsMeshComponent,
+    MarsAtmosphereMeshComponent,
+  ],
   template: `
     <ngt-color attach="background" *args="sceneColorArgs" />
     <ngt-hemisphere-light *args="hemiLightArgs" />
     <!-- <ngts-environment [options]="{ preset: 'sunset' }" /> -->
 
-    <ngt-mesh #sphereMeshRef [position]="meshPosition">
-      <ngt-sphere-geometry
-        *args="sphereGeoArgs"
-        (attached)="onAttachSphere($event)"
-      />
+    <sms-mars-mesh />
 
-      @let _textures = marsTextures.value();
-      <!-- @let map = _textures?.map;
-      @let normalMap = _textures?.normalMap;
-      @let bumpMap = _textures?.bumpMap; -->
-
-      <!-- <ngt-mesh-standard-material
-        [map]="map"
-        [normalMap]="normalMap"
-        [bumpMap]="bumpMap"
-        [parameters]="meshMatParams"
-      /> -->
-
-      @if (_textures) {
-      <ngt-shader-material [parameters]="marsShaderParameters">
-        <ngt-value
-          attach="uniforms"
-          [rawValue]="{
-            diffuseTexture: { value: _textures.map },
-            normalTexture: { value: _textures.normalMap },
-            bumpTexture: { value: _textures.bumpMap }
-          }"
-        />
-      </ngt-shader-material>
-      }
-
-      <ngt-mesh #atmosphereMeshRef [position]="meshPosition">
-        <ngt-sphere-geometry *args="sphereGeoArgs"/>
-        <ngt-shader-material [parameters]="atmosphereShaderParameters" />
-      </ngt-mesh>
-    </ngt-mesh>
+    <sms-atmosphere-mesh />
   `,
 })
 export class MarsScene {
@@ -103,95 +54,4 @@ export class MarsScene {
   protected hemiLightArgs: ConstructorParameters<typeof HemisphereLight> = [
     0xffffff, 0x808080,
   ];
-
-  /* -------------------- MESH RELATED CONFIG -------------------- */
-  protected meshPosition: NgtVector3 = [0, 0, 0];
-  protected meshMatParams: MeshStandardMaterialParameters = {
-    // color: 0xbd5417, // Orange-redish
-    wireframe: false,
-    flatShading: false,
-  };
-
-  /* -------------------- GEOMETRY RELATED CONFIG -------------------- */
-  protected sphereGeoArgs: ConstructorParameters<typeof SphereGeometry> = [
-    8, 64, 64,
-  ];
-
-  protected marsTextures = textureResource(() => ({
-    // map: './textures/8k_mars.jpg',
-    // bumpMap: './textures/8k_topo.jpg',
-    map: './textures/mars_4k_color.jpg',
-    bumpMap: './textures/mars_4k_topo.jpg',
-    normalMap: './textures/mars_4k_normal.jpg',
-  }));
-
-  protected marsShaderParameters: ShaderMaterialParameters = {
-    vertexShader: marsVertexShader,
-    fragmentShader: marsFragmentShader,
-    side: DoubleSide,
-    uniforms: {
-      /**
-       * The fragment shader has defined `diffuseTexture` as an "Uniform"
-       * qualifier. Initially we set as `null` as the `textureResource` is
-       * async, then use either `effect()` or conditional `@if` at the template.
-       */
-      diffuseTexture: {
-        value: null,
-        // value: this.marsTextures.value()?.map,
-      },
-      normalTexture: {
-        value: null,
-      },
-      bumpTexture: {
-        value: null,
-      }
-    },
-  };
-
-  protected atmosphereShaderParameters: ShaderMaterialParameters = {
-    vertexShader: atmosphereVertexShader,
-    fragmentShader: atmosphereFragmentShader,
-    side: BackSide,
-    blending: AdditiveBlending,
-  };
-
-  /* -------------------- ANIMATION RELATED CONFIG -------------------- */
-
-  /** Obtain the mesh reference with `viewChild` signal. */
-  sphereMeshRef = viewChild.required<ElementRef<Mesh>>('sphereMeshRef');
-  atmosphereMeshRef = viewChild.required<ElementRef<Mesh>>('atmosphereMeshRef');
-
-
-  onAttachSphere({ node, parent }: { node: SphereGeometry; parent: Mesh }) {
-    console.log('Sphere node: ', node);
-    console.log('Parent: ', parent);
-  }
-
-  /** Mars axis tilt angle in radians. */
-  private readonly _marsTiltAngle = -(25.2 * Math.PI) / 180;
-
-  /** Add the animation to the Three-js loop with `beforeRender` */
-  constructor() {
-    beforeRender(() => {
-      this.animateSphere();
-    });
-  }
-
-  /**
-   * Perform all animation related to our sphere here.
-   */
-  private animateSphere() {
-    /** Slighty scale the atmosphere mesh. */
-    const atmosphereMeshEl = this.atmosphereMeshRef().nativeElement;
-    atmosphereMeshEl.scale.set(1.1, 1.1, 1.1);
-
-    const sphereMeshEl = this.sphereMeshRef().nativeElement;
-    /** The tilt angle. */
-    sphereMeshEl.rotation.z = this._marsTiltAngle;
-    /**
-     * A bit of rotation as every planet does. In this case, small rotation in
-     * the Y axis.
-     */
-    sphereMeshEl.rotateY(0.0001);
-  }
 }
