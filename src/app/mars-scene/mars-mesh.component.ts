@@ -36,12 +36,12 @@ extend({ Mesh, SphereGeometry, MeshStandardMaterial, ShaderMaterial });
   standalone: true,
   template: `
     <!-- This mesh allows shadows from the directional light. -->
-    <ngt-mesh [position]="[0, 0, 0]">
+    <ngt-mesh [position]="[0, 0, 0]" castShadow>
       <ngt-sphere-geometry *args="overlayGeoArgs" />
-      <ngt-mesh-standard-material [parameters]="overlayMeshMatParams" />
+      <ngt-mesh-standard-material [parameters]="overlayMatParams" />
     </ngt-mesh>
 
-    <ngt-mesh #mesh [position]="position()">
+    <ngt-mesh #mesh [position]="position()" castShadow>
       <ngt-sphere-geometry
         *args="geometryArgs"
         (attached)="onAttachSphere($event)"
@@ -109,7 +109,7 @@ export class MarsMeshComponent {
    * The overlay to properly cast a shadow from the lightings.This also applies
    * an overlay colour.
    */
-  protected overlayMeshMatParams: MeshStandardMaterialParameters = {
+  protected overlayMatParams: MeshStandardMaterialParameters = {
     color: 0xbd5417, // Orange-redish
     wireframe: false,
     flatShading: false,

@@ -26,6 +26,7 @@ import { MarsScene } from './mars-scene/mars-scene.component';
         [camera]="canvasCamera"
         [lookAt]="canvasLookAt"
         (created)="$event.gl.setClearColor('black')"
+        shadows
       >
         <sms-mars-scene *canvasContent />
       </ngt-canvas>
@@ -37,7 +38,7 @@ export class App {
   protected title = 'surviving-mars-stats';
 
   protected canvasCamera: NgtCameraParameters = {
-    position: [0, 0, 18],
+    position: [0, 0, 20],
   };
   protected canvasLookAt: NgtVector3 = [0, 0, 0];
 }
