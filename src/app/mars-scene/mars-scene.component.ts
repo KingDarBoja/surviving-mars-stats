@@ -1,9 +1,10 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { extend, NgtArgs } from 'angular-three';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, viewChild } from '@angular/core';
+import { beforeRender, extend, NgtArgs } from 'angular-three';
 import { NgtsEnvironment } from 'angular-three-soba/staging';
 
 import {
   Color,
+  Group,
   HemisphereLight,
   Mesh,
   ShaderMaterial,
@@ -33,9 +34,10 @@ extend({ Color, Mesh, SphereGeometry, ShaderMaterial });
     <ngt-hemisphere-light *args="hemiLightArgs" />
     <!-- <ngts-environment [options]="{ preset: 'sunset' }" /> -->
 
-    <sms-mars-mesh />
-
-    <sms-atmosphere-mesh />
+    <ngt-group #marsMeshGroup>
+      <sms-mars-mesh />
+      <sms-atmosphere-mesh />
+    </ngt-group>
   `,
 })
 export class MarsScene {
@@ -54,4 +56,26 @@ export class MarsScene {
   protected hemiLightArgs: ConstructorParameters<typeof HemisphereLight> = [
     0xffffff, 0x808080,
   ];
+
+  /** */
+  private meshGroupRef = viewChild.required<ElementRef<Group>>('marsMeshGroup');
+
+  /** Mars axis tilt angle in radians. @TPDO apply to parent group instead. */
+  private readonly _marsTiltAngle = -(25.2 * Math.PI) / 180;
+
+  constructor() {
+    beforeRender(() => {
+      this.animate();
+    })
+  }
+
+  /**
+   * We want to avoid putting the tilt angle at the mars child mesh as the
+   * rotation speed can mess up the alignment of the geometry.
+   */
+  private animate() {
+    const meshGroupEl = this.meshGroupRef().nativeElement;
+    /** The tilt angle. */
+    meshGroupEl.rotation.z = this._marsTiltAngle;
+  }
 }

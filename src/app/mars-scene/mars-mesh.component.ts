@@ -83,9 +83,6 @@ export class MarsMeshComponent {
   /** */
   private meshRef = viewChild.required<ElementRef<Mesh>>('mesh');
 
-  /** Mars axis tilt angle in radians. @TPDO apply to parent group instead. */
-  private readonly _marsTiltAngle = -(25.2 * Math.PI) / 180;
-
   /** */
   protected marsTextures = textureResource(() => ({
     // map: './textures/8k_mars.jpg',
@@ -126,14 +123,14 @@ export class MarsMeshComponent {
     });
   }
 
+  /**
+   * Perform all animation related to our sphere here.
+   *
+   * - A bit of rotation as every planet does. In this case, small rotation in
+   *   the Y axis.
+   */
   private animate() {
     const sphereMeshEl = this.meshRef().nativeElement;
-    /** The tilt angle. */
-    sphereMeshEl.rotation.z = this._marsTiltAngle;
-    /**
-     * A bit of rotation as every planet does. In this case, small rotation in
-     * the Y axis.
-     */
     sphereMeshEl.rotateY(0.0001);
   }
 

@@ -67,9 +67,10 @@ export class MarsAtmosphereMeshComponent {
 
   /**
    * Perform all animation related to our sphere here.
+   * 
+   * - Slighty scale the atmosphere mesh.
    */
   private animate() {
-    /** Slighty scale the atmosphere mesh. */
     const atmosphereMeshEl = this.meshRef().nativeElement;
     atmosphereMeshEl.scale.set(1.1, 1.1, 1.1);
   }
