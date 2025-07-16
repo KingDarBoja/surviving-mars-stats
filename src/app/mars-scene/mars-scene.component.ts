@@ -1,19 +1,21 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, viewChild } from '@angular/core';
-import { beforeRender, extend, NgtArgs } from 'angular-three';
-import { NgtsEnvironment } from 'angular-three-soba/staging';
+import { beforeRender, extend, NgtArgs, NgtVector3 } from 'angular-three';
 
 import {
   Color,
+  DirectionalLight,
   Group,
   HemisphereLight,
   Mesh,
-  ShaderMaterial,
+  MeshStandardMaterial,
+  MeshStandardMaterialParameters,
+  MultiplyBlending,
   SphereGeometry,
 } from 'three';
 import { MarsMeshComponent } from './mars-mesh.component';
 import { MarsAtmosphereMeshComponent } from './mars-atmosphere-mesh.component';
 
-extend({ Color, Mesh, SphereGeometry, ShaderMaterial });
+extend({ Color, Group, Mesh, SphereGeometry, MeshStandardMaterial });
 
 /**
  * - `CUSTOM_ELEMENTS_SCHEMA` is required to use Angular Three elements in the
@@ -25,23 +27,27 @@ extend({ Color, Mesh, SphereGeometry, ShaderMaterial });
   standalone: true,
   imports: [
     NgtArgs,
-    NgtsEnvironment,
     MarsMeshComponent,
     MarsAtmosphereMeshComponent,
   ],
   template: `
     <ngt-color attach="background" *args="sceneColorArgs" />
-    <ngt-hemisphere-light *args="hemiLightArgs" />
-    <!-- <ngts-environment [options]="{ preset: 'sunset' }" /> -->
+    <ngt-directional-light *args="sunLightArgs" [position]="sunLightPosition" />
+    <!-- <ngt-hemisphere-light *args="hemiLightArgs" /> -->
 
     <ngt-group #marsMeshGroup>
+      <ngt-mesh [position]="[0, 0, 0]">
+        <ngt-sphere-geometry *args="[8.05, 32, 32]" />
+        <ngt-mesh-standard-material [parameters]="meshMatParams" />
+      </ngt-mesh>
+
       <sms-mars-mesh />
       <sms-atmosphere-mesh />
     </ngt-group>
   `,
 })
 export class MarsScene {
-  /* -------------------- SCENE RELATED CONFIG -------------------- */
+  /* -------------------- SCENE COLOR CONFIG -------------------- */
 
   /** Convert from Hex to RGB to avoid typing errors. */
   protected sceneColor = new Color().setHex(0x303030);
@@ -53,14 +59,30 @@ export class MarsScene {
     this.sceneColor.b,
   ];
 
+  /* -------------------- LIGHTING CONFIG -------------------- */
+
   protected hemiLightArgs: ConstructorParameters<typeof HemisphereLight> = [
     0xffffff, 0x808080,
   ];
+  protected sunLightArgs: ConstructorParameters<typeof DirectionalLight> = [0xffffff, 12];
+  protected sunLightPosition: NgtVector3 = [-1.4, 0, 0.8];
 
-  /** */
+  protected meshMatParams: MeshStandardMaterialParameters = {
+    color: 0xbd5417, // Orange-redish
+    wireframe: false,
+    flatShading: false,
+    transparent: true,
+    opacity: 0.5,
+    premultipliedAlpha: true,
+    blending: MultiplyBlending,
+  };
+
+  /* -------------------- ANIMATION CONFIG -------------------- */
+
+  /** Select the group element to perform some animation changes. */
   private meshGroupRef = viewChild.required<ElementRef<Group>>('marsMeshGroup');
 
-  /** Mars axis tilt angle in radians. @TPDO apply to parent group instead. */
+  /** Mars axis tilt angle in radians. */
   private readonly _marsTiltAngle = -(25.2 * Math.PI) / 180;
 
   constructor() {
