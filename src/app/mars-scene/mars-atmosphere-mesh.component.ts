@@ -7,8 +7,8 @@ import {
 } from '@angular/core';
 import { beforeRender, extend, NgtArgs, NgtVector3 } from 'angular-three';
 
-import atmosphereFragmentShader from '../shaders/atmosphere/atmosphereFragment.glsl';
-import atmosphereVertexShader from '../shaders/atmosphere/atmosphereVertex.glsl';
+import atmosphereFragmentShader from '../assets/shaders/atmosphere/atmosphereFragment.glsl';
+import atmosphereVertexShader from '../assets/shaders/atmosphere/atmosphereVertex.glsl';
 import {
   AdditiveBlending,
   BackSide,

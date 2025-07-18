@@ -5,6 +5,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { beforeRender, extend, NgtArgs, NgtVector3 } from 'angular-three';
+import { gltfResource } from 'angular-three-soba/loaders';
 
 import {
   AxesHelper,
@@ -21,9 +22,7 @@ import {
 import { MarsMeshComponent } from './mars-mesh.component';
 import { MarsAtmosphereMeshComponent } from './mars-atmosphere-mesh.component';
 
-import { gltfResource } from 'angular-three-soba/loaders';
-import { NgtsCenter } from 'angular-three-soba/staging';
-import phobosMoon from '../glb/NASA_Phobos.glb' with { loader: 'file' };
+import phobosMoon from '../assets/glb/NASA_Phobos.glb' with { loader: 'file' };
 
 extend({
   Color,
@@ -47,7 +46,6 @@ extend({
   standalone: true,
   imports: [
     NgtArgs,
-    NgtsCenter,
     MarsMeshComponent,
     MarsAtmosphereMeshComponent,
   ],
