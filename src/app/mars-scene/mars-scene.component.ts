@@ -21,6 +21,10 @@ import {
 import { MarsMeshComponent } from './mars-mesh.component';
 import { MarsAtmosphereMeshComponent } from './mars-atmosphere-mesh.component';
 
+import { gltfResource } from 'angular-three-soba/loaders';
+import { NgtsCenter } from 'angular-three-soba/staging';
+import phobosMoon from '../glb/NASA_Phobos.glb' with { loader: 'file' };
+
 extend({
   Color,
   Group,
@@ -41,7 +45,12 @@ extend({
   selector: 'sms-mars-scene',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   standalone: true,
-  imports: [NgtArgs, MarsMeshComponent, MarsAtmosphereMeshComponent],
+  imports: [
+    NgtArgs,
+    NgtsCenter,
+    MarsMeshComponent,
+    MarsAtmosphereMeshComponent,
+  ],
   template: `
     <ngt-color attach="background" *args="sceneColorArgs" />
     <ngt-directional-light
@@ -52,8 +61,16 @@ extend({
     <!-- <ngt-hemisphere-light *args="hemiLightArgs" /> -->
 
     <!-- <ngt-axes-helper *args="[20]" /> -->
+
     <ngt-group #marsOrbitGroup>
       <ngt-group #phobosOrbitGroup>
+        <ngt-primitive
+          *args="[gltfPhobos.scene()]"
+          [parameters]="{ scale: 0.08 }"
+          [position]="phobosPosition"
+          receiveShadow
+        />
+
         <ngt-mesh #phobosMesh [position]="phobosPosition" receiveShadow>
           <ngt-icosahedron-geometry *args="phobosGeoArgs" />
           <ngt-mesh-standard-material [parameters]="phobosMatParams" />
@@ -98,6 +115,8 @@ export class MarsScene {
   protected sunLightPosition: NgtVector3 = [-22, 0, 22];
 
   /* -------------------- OTHER MESHES CONFIG -------------------- */
+  protected gltfPhobos = gltfResource(() => phobosMoon);
+
   protected phobosGeoArgs: ConstructorParameters<typeof IcosahedronGeometry> = [
     0.5, 5,
   ];
