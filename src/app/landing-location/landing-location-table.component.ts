@@ -1,11 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ColDef, ColGroupDef } from 'ag-grid-community'; // Column Definition Type Interfaces
 import { map, tap } from 'rxjs';
 import Papa from 'papaparse';
 
-import { UiTableComponent } from '../ui-table/ui-table.component';
+import { UiTableComponent, ColDef, ColGroupDef } from '../ui-table/ui-table.component';
 import { GameIcons, ResourceIconRenderer } from './icons-renderer.component';
+import { CustomSetFilterComponent } from '../ui-table/custom-set-filter.component';
 
 interface LandingLocationSchemaColumn {
   /** */
@@ -101,7 +101,7 @@ type LandingLocationColDef =
 @Component({
   standalone: true,
   selector: 'sms-landing-location',
-  imports: [UiTableComponent],
+  imports: [UiTableComponent, CustomSetFilterComponent],
   template: `
     <sms-ui-table
       gridId="landing-location-table"
@@ -128,7 +128,7 @@ export class LandingLocationTableComponent {
         {
           field: 'topography',
           headerName: 'Topography',
-          filter: true,
+          filter: { component: CustomSetFilterComponent },
         },
         {
           columnGroupShow: 'open',

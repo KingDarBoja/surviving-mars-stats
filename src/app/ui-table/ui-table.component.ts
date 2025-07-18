@@ -14,7 +14,7 @@ import type {
   AbstractColDef,
 } from 'ag-grid-community';
 
-export type { ColDef } from 'ag-grid-community';
+export type { ColDef, ColGroupDef } from 'ag-grid-community';
 
 @Component({
   standalone: true,
@@ -69,6 +69,7 @@ export class UiTableComponent<TData = any> {
       autoHeaderHeight: true,
       filterParams: {
         maxNumConditions: 1,
+        buttons: ['apply', 'clear', 'reset', 'cancel'],
       },
       flex: 1,
       minWidth: 140,

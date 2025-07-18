@@ -1,11 +1,13 @@
 import {
   CellStyleModule,
   ClientSideRowModelModule,
+  CustomFilterModule,
   ModuleRegistry,
   NumberFilterModule,
   PaginationModule,
   PinnedRowModule,
   QuickFilterModule,
+  RowApiModule,
   RowSelectionModule,
   RowStyleModule,
   TextFilterModule,
@@ -13,6 +15,8 @@ import {
 
 export const registerAgGridModules = () => {
   ModuleRegistry.registerModules([
+    CustomFilterModule,
+    RowApiModule,
     CellStyleModule,
     ClientSideRowModelModule,
     NumberFilterModule,
