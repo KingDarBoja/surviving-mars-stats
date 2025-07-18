@@ -5,6 +5,7 @@ import { map, tap } from 'rxjs';
 import Papa from 'papaparse';
 
 import { UiTableComponent } from '../ui-table/ui-table.component';
+import { GameIcons, ResourceIconRenderer } from './icons-renderer.component';
 
 interface LandingLocationSchemaColumn {
   /** */
@@ -25,6 +26,10 @@ interface LandingLocationSchemaColumn {
   altitude: number;
   /** In degrees */
   temperature: number;
+  /* These are summaries that is displayed when the group is closed. */
+  sum_resources: number;
+  sum_disasters: number;
+  /** */
   metals: number;
   rare_metals: number;
   concrete: number;
@@ -115,79 +120,121 @@ export class LandingLocationTableComponent {
       field: 'coordinates',
       headerName: 'Coordinates',
       sortable: false,
+      filter: false,
+    },
+    {
+      headerName: 'Geography',
+      children: [
+        {
+          field: 'topography',
+          headerName: 'Topography',
+          filter: true,
+        },
+        {
+          columnGroupShow: 'open',
+          field: 'altitude',
+          headerName: 'Altitude',
+          filter: 'agNumberColumnFilter',
+        },
+        {
+          columnGroupShow: 'open',
+          field: 'temperature',
+          headerName: 'Temperature',
+          filter: 'agNumberColumnFilter',
+        },
+        {
+          columnGroupShow: 'open',
+          field: 'difficulty',
+          headerName: 'Difficulty',
+          filter: 'agNumberColumnFilter',
+        },
+      ],
     },
     {
       headerName: 'Disasters',
+      openByDefault: true,
       children: [
         {
+          columnGroupShow: 'closed',
+          field: 'sum_disasters',
+          headerName: 'Total',
+          filter: 'agNumberColumnFilter',
+        },
+        {
+          columnGroupShow: 'open',
           field: 'dust_devils',
           headerName: 'Dust Devils',
-          filter: true,
+          filter: 'agNumberColumnFilter',
+          cellRenderer: ResourceIconRenderer,
+          context: {
+            iconName: GameIcons.DUST_DEVIL,
+          },
         },
         {
+          columnGroupShow: 'open',
           field: 'dust_storm',
           headerName: 'Dust Storms',
-          filter: true,
+          filter: 'agNumberColumnFilter',
+          cellRenderer: ResourceIconRenderer,
+          context: {
+            iconName: GameIcons.DUST_STORM,
+          },
         },
         {
+          columnGroupShow: 'open',
           field: 'meteors',
           headerName: 'Meteors',
-          filter: true,
+          filter: 'agNumberColumnFilter',
+          cellRenderer: ResourceIconRenderer,
+          context: {
+            iconName: GameIcons.METEOR_SHOWER,
+          },
         },
         {
+          columnGroupShow: 'open',
           field: 'cold_waves',
           headerName: 'Cold Waves',
-          filter: true,
+          filter: 'agNumberColumnFilter',
+          cellRenderer: ResourceIconRenderer,
+          context: {
+            iconName: GameIcons.COLD_WAVE,
+          },
         },
       ],
     },
     {
       headerName: 'Resources',
+      openByDefault: true,
       children: [
         {
+          columnGroupShow: 'closed',
+          field: 'sum_resources',
+          headerName: 'Total',
+          filter: 'agNumberColumnFilter',
+        },
+        {
+          columnGroupShow: 'open',
           field: 'concrete',
           headerName: 'Concrete',
-          filter: true,
+          filter: 'agNumberColumnFilter',
         },
         {
+          columnGroupShow: 'open',
           field: 'water',
           headerName: 'Water',
-          filter: true,
+          filter: 'agNumberColumnFilter',
         },
         {
+          columnGroupShow: 'open',
           field: 'metals',
           headerName: 'Metals',
-          filter: true,
+          filter: 'agNumberColumnFilter',
         },
         {
+          columnGroupShow: 'open',
           field: 'rare_metals',
           headerName: 'Rare Metals',
-          filter: true,
-        },
-      ],
-    },
-    {
-      headerName: 'Resources',
-      children: [
-        {
-          field: 'concrete',
-          headerName: 'Concrete',
-          filter: true,
-        },
-        {
-          field: 'water',
-          headerName: 'Water',
-          filter: true,
-        },
-        {
-          field: 'metals',
-          headerName: 'Metals',
-          filter: true,
-        },
-        {
-          field: 'rare_metals',
-          headerName: 'Rare Metals',
-          filter: true,
+          filter: 'agNumberColumnFilter',
         },
       ],
     },
@@ -213,9 +260,12 @@ export class LandingLocationTableComponent {
   }
 
   private formatRows(jsonRows: LandingLocationSchema[]) {
-    return jsonRows
-      .map<LandingLocationSchemaColumn>((jr) => ({
-        coordinates: jr.Coordinates,
+    return jsonRows.map<LandingLocationSchemaColumn>((jr) => {
+      const formattedLat = jr['Latitude °'].toString().padStart(2, '0');
+      const formattedLong = jr['Longitude °'].toString().padStart(3, '0');
+      return {
+        // coordinates: jr.Coordinates,
+        coordinates: `${formattedLat}${jr.Latitude}:${formattedLong}${jr.Longitude}`,
         latitude_deg: jr['Latitude °'],
         latitude: jr.Latitude,
         longitude_deg: jr['Longitude °'],
@@ -247,7 +297,11 @@ export class LandingLocationTableComponent {
         breakthrough_11: jr['Breakthrough 11'],
         breakthrough_12: jr['Breakthrough 12'],
         breakthrough_13: jr['Breakthrough 13'],
-      }))
-      .splice(0, 200);
+        /* Additional fields. */
+        sum_disasters:
+          jr['Dust Storms'] + jr['Dust Devils'] + jr.Meteors + jr['Cold Waves'],
+        sum_resources: jr.Metals + jr.Concrete + jr.Water + jr['Rare Metals'],
+      };
+    });
   }
 }

@@ -67,8 +67,11 @@ export class UiTableComponent<TData = any> {
       cellClass: 'ag-custom-cell',
       wrapHeaderText: true,
       autoHeaderHeight: true,
+      filterParams: {
+        maxNumConditions: 1,
+      },
       flex: 1,
-      minWidth: 120,
+      minWidth: 140,
       // headerValueGetter: (p) => this.localizeHeader(p),
       context: {
         label: '',
