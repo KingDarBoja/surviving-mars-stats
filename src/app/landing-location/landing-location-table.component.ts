@@ -117,6 +117,7 @@ export class LandingLocationTableComponent {
   rowData = signal<LandingLocationSchemaColumn[]>([]);
   readonly colDefs: LandingLocationColDef[] = [
     {
+      minWidth: 120,
       field: 'coordinates',
       headerName: 'Coordinates',
       sortable: false,
@@ -157,7 +158,7 @@ export class LandingLocationTableComponent {
         {
           columnGroupShow: 'closed',
           field: 'sum_disasters',
-          headerName: 'Total',
+          headerName: 'Total disasters',
           filter: 'agNumberColumnFilter',
         },
         {
@@ -209,7 +210,7 @@ export class LandingLocationTableComponent {
         {
           columnGroupShow: 'closed',
           field: 'sum_resources',
-          headerName: 'Total',
+          headerName: 'Total resources',
           filter: 'agNumberColumnFilter',
         },
         {

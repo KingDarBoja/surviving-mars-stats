@@ -57,8 +57,9 @@ export class UiTableComponent<TData = any> {
       // Material icons are designed to look best at 18, 24, 36 or 48px
       .withParams({
         iconSize: 18,
+        fontSize: 12,
         browserColorScheme: 'light',
-        headerFontWeight: 700,
+        headerFontWeight: 500,
         headerTextColor: '#FFFFFF',
         headerBackgroundColor: '#bd5417',
       }),

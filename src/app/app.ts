@@ -19,20 +19,27 @@ import { LandingLocationTableComponent } from './landing-location/landing-locati
   selector: 'app-root',
   styleUrl: './app.scss',
   template: `
-    <!-- <router-outlet></router-outlet> -->
-    <h1>Surviving Mars Landing</h1>
+    <div class="container mx-auto my-4">
+      <div class="px-4 border border-solid border-orange-200">
+        <!-- <router-outlet></router-outlet> -->
+        <h1 class="font-bold text-center pb-4">Surviving Mars Landing</h1>
 
-    <sms-landing-location />
-    <!-- <div id="canvas-container">
-      <ngt-canvas
-        [camera]="canvasCamera"
-        [lookAt]="canvasLookAt"
-        (created)="$event.gl.setClearColor('black')"
-        shadows
-      >
-        <sms-mars-scene *canvasContent />
-      </ngt-canvas>
-    </div> -->
+        <section class="flex flex-col gap-8">
+          <!-- <div id="canvas-container">
+            <ngt-canvas
+              [camera]="canvasCamera"
+              [lookAt]="canvasLookAt"
+              (created)="$event.gl.setClearColor('black')"
+              shadows
+            >
+              <sms-mars-scene *canvasContent />
+            </ngt-canvas>
+          </div> -->
+
+          <sms-landing-location />
+        </section>
+      </div>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

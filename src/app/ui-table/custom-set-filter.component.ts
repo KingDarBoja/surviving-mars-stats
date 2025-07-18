@@ -2,18 +2,19 @@
 import { Component } from '@angular/core';
 import { IFilterAngularComp } from 'ag-grid-angular';
 import { IFilterParams, IDoesFilterPassParams } from 'ag-grid-community';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'sms-custom-set-filter',
+  imports: [MatCheckboxModule],
   template: `
     <div class="custom-filter-container">
       @for (value of uniqueValues; track value) {
         <div class="custom-filter-item">
-          <input
-            type="checkbox"
+          <mat-checkbox
             [id]="value"
             [checked]="selectedValues.has(value)"
-            (change)="onCheckboxChange(value, $event)"
+            (change)="onCheckboxChange(value, $event.checked)"
           />
           <label [for]="value">{{ value }}</label>
         </div>
@@ -74,8 +75,7 @@ export class CustomSetFilterComponent implements IFilterAngularComp {
     this.selectedValues = new Set(this.uniqueValues);
   }
 
-  onCheckboxChange(value: string, event: Event): void {
-    const isChecked = (event.target as HTMLInputElement).checked;
+  onCheckboxChange(value: string, isChecked: boolean): void {
     if (isChecked) {
       this.selectedValues.add(value);
     } else {
