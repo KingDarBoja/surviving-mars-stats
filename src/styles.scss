@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* -------------- Start custom styles for header and cell for ag-grid table -------------- */
+.ag-custom-header {
+  text-align: center;
+}
+
+.ag-custom-cell {
+  text-align: center;
+}
+
+/* -------------- End custom styles for header and cell for ag-grid table -------------- */

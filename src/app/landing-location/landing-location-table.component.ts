@@ -1,0 +1,253 @@
+import { Component, inject, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { ColDef, ColGroupDef } from 'ag-grid-community'; // Column Definition Type Interfaces
+import { map, tap } from 'rxjs';
+import Papa from 'papaparse';
+
+import { UiTableComponent } from '../ui-table/ui-table.component';
+
+interface LandingLocationSchemaColumn {
+  /** */
+  coordinates: string;
+  /** */
+  latitude_deg: number;
+  /** */
+  latitude: 'N' | 'S';
+  /** */
+  longitude_deg: number;
+  /** */
+  longitude: 'W' | 'E';
+  /** */
+  topography: 'Relatively Flat' | 'Steep' | 'Rough' | 'Mountanious';
+  /** */
+  difficulty: number;
+  /** */
+  altitude: number;
+  /** In degrees */
+  temperature: number;
+  metals: number;
+  rare_metals: number;
+  concrete: number;
+  water: number;
+  dust_devils: number;
+  dust_storm: number;
+  meteors: number;
+  cold_waves: number;
+  /** These are fixed enum string. */
+  map_name: string;
+  /** These can be empty or a fixed enum string. */
+  named_location: string;
+  /* --------- ALL BREAKTHROUGHS --------- */
+  breakthrough_1: string;
+  breakthrough_2: string;
+  breakthrough_3: string;
+  breakthrough_4: string;
+  breakthrough_5: string;
+  breakthrough_6: string;
+  breakthrough_7: string;
+  breakthrough_8: string;
+  breakthrough_9: string;
+  breakthrough_10: string;
+  breakthrough_11: string;
+  breakthrough_12: string;
+  breakthrough_13: string;
+}
+
+/** The original csv column names. */
+interface LandingLocationSchema {
+  Coordinates: string;
+  'Latitude °': number;
+  Latitude: 'N' | 'S';
+  'Longitude °': number;
+  Longitude: 'W' | 'E';
+  Topography: 'Relatively Flat' | 'Steep' | 'Rough' | 'Mountanious';
+  'Difficulty Challenge': number;
+  Altitude: number;
+  Temperature: number;
+  Metals: number;
+  'Rare Metals': number;
+  Concrete: number;
+  Water: number;
+  'Dust Devils': number;
+  'Dust Storms': number;
+  Meteors: number;
+  'Cold Waves': number;
+  'Map Name': string;
+  'Named Location': null;
+  'Breakthrough 1': string;
+  'Breakthrough 2': string;
+  'Breakthrough 3': string;
+  'Breakthrough 4': string;
+  'Breakthrough 5': string;
+  'Breakthrough 6': string;
+  'Breakthrough 7': string;
+  'Breakthrough 8': string;
+  'Breakthrough 9': string;
+  'Breakthrough 10': string;
+  'Breakthrough 11': string;
+  'Breakthrough 12': string;
+  'Breakthrough 13': string;
+}
+
+type LandingLocationColDef =
+  | ColDef<LandingLocationSchemaColumn>
+  | ColGroupDef<LandingLocationSchemaColumn>;
+
+@Component({
+  standalone: true,
+  selector: 'sms-landing-location',
+  imports: [UiTableComponent],
+  template: `
+    <sms-ui-table
+      gridId="landing-location-table"
+      [rowData]="rowData()"
+      [colDefs]="colDefs"
+      (gridReady)="gridReady()"
+    />
+  `,
+})
+export class LandingLocationTableComponent {
+  private readonly http = inject(HttpClient);
+
+  rowData = signal<LandingLocationSchemaColumn[]>([]);
+  readonly colDefs: LandingLocationColDef[] = [
+    {
+      field: 'coordinates',
+      headerName: 'Coordinates',
+      sortable: false,
+    },
+    {
+      headerName: 'Disasters',
+      children: [
+        {
+          field: 'dust_devils',
+          headerName: 'Dust Devils',
+          filter: true,
+        },
+        {
+          field: 'dust_storm',
+          headerName: 'Dust Storms',
+          filter: true,
+        },
+        {
+          field: 'meteors',
+          headerName: 'Meteors',
+          filter: true,
+        },
+        {
+          field: 'cold_waves',
+          headerName: 'Cold Waves',
+          filter: true,
+        },
+      ],
+    },
+    {
+      headerName: 'Resources',
+      children: [
+        {
+          field: 'concrete',
+          headerName: 'Concrete',
+          filter: true,
+        },
+        {
+          field: 'water',
+          headerName: 'Water',
+          filter: true,
+        },
+        {
+          field: 'metals',
+          headerName: 'Metals',
+          filter: true,
+        },
+        {
+          field: 'rare_metals',
+          headerName: 'Rare Metals',
+          filter: true,
+        },
+      ],
+    },
+    {
+      headerName: 'Resources',
+      children: [
+        {
+          field: 'concrete',
+          headerName: 'Concrete',
+          filter: true,
+        },
+        {
+          field: 'water',
+          headerName: 'Water',
+          filter: true,
+        },
+        {
+          field: 'metals',
+          headerName: 'Metals',
+          filter: true,
+        },
+        {
+          field: 'rare_metals',
+          headerName: 'Rare Metals',
+          filter: true,
+        },
+      ],
+    },
+  ];
+
+  gridReady() {
+    this.http
+      .get('./data/MapData Breakthroughs.csv', { responseType: 'text' })
+      .pipe(
+        map((csvData: string) => {
+          const csv = Papa.parse<LandingLocationSchema>(csvData, {
+            skipEmptyLines: true,
+            header: true,
+            dynamicTyping: true, // Automatically convert numbers and booleans
+          });
+          return csv.data;
+        }),
+        tap((jsonRows) => {
+          this.rowData.set(this.formatRows(jsonRows));
+        }),
+      )
+      .subscribe();
+  }
+
+  private formatRows(jsonRows: LandingLocationSchema[]) {
+    return jsonRows
+      .map<LandingLocationSchemaColumn>((jr) => ({
+        coordinates: jr.Coordinates,
+        latitude_deg: jr['Latitude °'],
+        latitude: jr.Latitude,
+        longitude_deg: jr['Longitude °'],
+        longitude: jr.Longitude,
+        topography: jr.Topography,
+        difficulty: jr['Difficulty Challenge'],
+        altitude: jr.Altitude,
+        temperature: jr.Temperature,
+        metals: jr.Metals,
+        rare_metals: jr['Rare Metals'],
+        concrete: jr.Concrete,
+        water: jr.Water,
+        dust_devils: jr['Dust Devils'],
+        dust_storm: jr['Dust Storms'],
+        meteors: jr.Meteors,
+        cold_waves: jr['Cold Waves'],
+        map_name: jr['Map Name'],
+        named_location: jr['Named Location'],
+        breakthrough_1: jr['Breakthrough 1'],
+        breakthrough_2: jr['Breakthrough 2'],
+        breakthrough_3: jr['Breakthrough 3'],
+        breakthrough_4: jr['Breakthrough 4'],
+        breakthrough_5: jr['Breakthrough 5'],
+        breakthrough_6: jr['Breakthrough 6'],
+        breakthrough_7: jr['Breakthrough 7'],
+        breakthrough_8: jr['Breakthrough 8'],
+        breakthrough_9: jr['Breakthrough 9'],
+        breakthrough_10: jr['Breakthrough 10'],
+        breakthrough_11: jr['Breakthrough 11'],
+        breakthrough_12: jr['Breakthrough 12'],
+        breakthrough_13: jr['Breakthrough 13'],
+      }))
+      .splice(0, 200);
+  }
+}

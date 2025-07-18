@@ -4,6 +4,7 @@ import { NgtCanvas } from 'angular-three/dom';
 import { NgtCameraParameters, NgtVector3 } from 'angular-three';
 
 import { MarsScene } from './mars-scene/mars-scene.component';
+import { LandingLocationTableComponent } from './landing-location/landing-location-table.component';
 
 /**
  * In order to render your scene graph properly, Angular Three needs to wait
@@ -12,7 +13,7 @@ import { MarsScene } from './mars-scene/mars-scene.component';
  * so `NgtCanvas` can render the content when it is ready.
  */
 @Component({
-  imports: [RouterModule, NgtCanvas, MarsScene],
+  imports: [RouterModule, NgtCanvas, MarsScene, LandingLocationTableComponent],
   standalone: true,
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'app-root',
@@ -21,7 +22,8 @@ import { MarsScene } from './mars-scene/mars-scene.component';
     <!-- <router-outlet></router-outlet> -->
     <h1>Surviving Mars Landing</h1>
 
-    <div id="canvas-container">
+    <sms-landing-location />
+    <!-- <div id="canvas-container">
       <ngt-canvas
         [camera]="canvasCamera"
         [lookAt]="canvasLookAt"
@@ -30,7 +32,7 @@ import { MarsScene } from './mars-scene/mars-scene.component';
       >
         <sms-mars-scene *canvasContent />
       </ngt-canvas>
-    </div>
+    </div> -->
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
