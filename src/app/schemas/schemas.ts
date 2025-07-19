@@ -1,0 +1,198 @@
+/** The locale breakthrough desc csv column. */
+export type BreakthroughSourceLocaleSchema = {
+  break_id: BreakthroughId;
+  name_en: string;
+  name_br: string;
+  name_fr: string;
+};
+
+export const BreakthroughMapping = {
+  'Ancient Terraforming Device': 'AncientTerraformingDevice',
+  'Designed Forestation': 'DesignedForestation',
+  'Lake Vaporators': 'LakeVaporators',
+  'Landscaping Nanites': 'LandscapingNanites',
+  'Resilient Vegetation': 'ResilientVegetation',
+  'Capture Asteroid': 'CaptureAsteroid',
+  'Cargobay of holding': 'CargobayOfHolding',
+  'Construction Nanites': 'ConstructionNanites',
+  'Global Support': 'GlobalSupport',
+  'Mars Marketing': 'MarsMarketing',
+  'Mole People': 'MolePeople',
+  'Vehicle Weight Optimizations': 'VehicleWeightOptimizations',
+  'Hull Polarization': 'HullPolarization',
+  'Project Phoenix': 'ProjectPhoenix',
+  'Soylent Green': 'SoylentGreen',
+  'Neural Empathy': 'NeuralEmpathy',
+  'Rapid Sleep': 'RapidSleep',
+  'The Positronic Brain': 'ThePositronicBrain',
+  'Safe Mode': 'SafeMode',
+  'Hive Mind': 'HiveMind',
+  'Space Rehabilitation': 'SpaceRehabilitation',
+  'Wireless Power': 'WirelessPower',
+  'Printed Electronics': 'PrintedElectronics',
+  'Core Metals': 'CoreMetals',
+  'Core Water': 'CoreWater',
+  'Core Rare Metals': 'CoreRareMetals',
+  'Superior Cables': 'SuperiorCables',
+  'Superior Pipes': 'SuperiorPipes',
+  'Alien Imprints': 'AlienImprints',
+  'Nocturnal Adaptation': 'NocturnalAdaptation',
+  'Gene Selection': 'GeneSelection',
+  'Martian Diet': 'MartianDiet',
+  'Eternal Fusion': 'EternalFusion',
+  'Superconducting Computing': 'SuperconductingComputing',
+  'Nano Refinement': 'NanoRefinement',
+  'Artificial Muscles': 'ArtificialMuscles',
+  'Inspiring Architecture': 'InspiringArchitecture',
+  'Giant Crops': 'GiantCrops',
+  'Neo-Concrete': 'NeoConcrete',
+  'Advanced Drone Drive': 'AdvancedDroneDrive',
+  'Dry Farming': 'DryFarming',
+  'Martian Steel': 'MartianSteel',
+  'Vector Pump': 'VectorPump',
+  Superfungus: 'Superfungus',
+  'Hypersensitive Photovoltaics': 'HypersensitivePhotovoltaics',
+  'Frictionless Composites': 'FrictionlessComposites',
+  'Zero-Space Computing': 'ZeroSpaceComputing',
+  'Multispiral Architecture': 'MultispiralArchitecture',
+  'Magnetic Extraction': 'MagneticExtraction',
+  'Sustained Workload': 'SustainedWorkload',
+  'Forever Young': 'ForeverYoung',
+  'Martianborn Ingenuity': 'MartianbornIngenuity',
+  'Cryo-sleep': 'CryoSleep',
+  Cloning: 'Cloning',
+  'Good Vibrations': 'GoodVibrations',
+  'Dome Streamlining': 'DomeStreamlining',
+  'Prefab Compression': 'PrefabCompression',
+  'Extractor AI': 'ExtractorAI',
+  'Service Bots': 'ServiceBots',
+  'Overcharge Amplifications': 'OverchargeAmplification',
+  'Plutonium Synthesis': 'PlutoniumSynthesis',
+  'Interplanetary Learning': 'InterplanetaryLearning',
+  'Vocation-Oriented Society': 'Vocation-Oriented Society',
+  'Plasma Rocket': 'PlasmaRocket',
+  'Autonomous Hubs': 'AutonomousHubs',
+  'Factory Automation': 'FactoryAutomation',
+  'Gem Architecture': 'GemArchitecture',
+} as const;
+
+export type BreakthroughName = keyof typeof BreakthroughMapping;
+export type BreakthroughId =
+  (typeof BreakthroughMapping)[keyof typeof BreakthroughMapping];
+
+export type LocaleSchema = {
+  en: string;
+  br: string;
+  fr: string;
+};
+
+export type BreakthroughLocaleSchema = {
+  id: string;
+  name_loc: LocaleSchema;
+  desc_loc: LocaleSchema;
+};
+
+/** The original csv column names. */
+export type LandingLocationSchema = {
+  Coordinates: string;
+  'Latitude °': number;
+  Latitude: 'N' | 'S';
+  'Longitude °': number;
+  Longitude: 'W' | 'E';
+  Topography: 'Relatively Flat' | 'Steep' | 'Rough' | 'Mountanious';
+  'Difficulty Challenge': number;
+  Altitude: number;
+  Temperature: number;
+  Metals: number;
+  'Rare Metals': number;
+  Concrete: number;
+  Water: number;
+  'Dust Devils': number;
+  'Dust Storms': number;
+  Meteors: number;
+  'Cold Waves': number;
+  'Map Name': string;
+  'Named Location': string | null;
+  'Breakthrough 1': BreakthroughName;
+  'Breakthrough 2': BreakthroughName;
+  'Breakthrough 3': BreakthroughName;
+  'Breakthrough 4': BreakthroughName;
+  'Breakthrough 5': BreakthroughName;
+  'Breakthrough 6': BreakthroughName;
+  'Breakthrough 7': BreakthroughName;
+  'Breakthrough 8': BreakthroughName;
+  'Breakthrough 9': BreakthroughName;
+  'Breakthrough 10': BreakthroughName;
+  'Breakthrough 11': BreakthroughName;
+  'Breakthrough 12': BreakthroughName;
+  'Breakthrough 13': BreakthroughName;
+};
+
+// type BreakthroughId =
+//   | 'AncientTerraformingDevice'
+//   | 'DesignedForestation'
+//   | 'LakeVaporators'
+//   | 'LandscapingNanites'
+//   | 'ResilientVegetation'
+//   | 'CaptureAsteroid'
+//   | 'CargobayOfHolding'
+//   | 'ConstructionNanites'
+//   | 'GlobalSupport'
+//   | 'MarsMarketing'
+//   | 'MolePeople'
+//   | 'VehicleWeightOptimizations'
+//   | 'HullPolarization'
+//   | 'ProjectPhoenix'
+//   | 'SoylentGreen'
+//   | 'NeuralEmpathy'
+//   | 'RapidSleep'
+//   | 'ThePositronicBrain'
+//   | 'SafeMode'
+//   | 'HiveMind'
+//   | 'SpaceRehabilitation'
+//   | 'WirelessPower'
+//   | 'PrintedElectronics'
+//   | 'CoreMetals'
+//   | 'CoreWater'
+//   | 'CoreRareMetals'
+//   | 'SuperiorCables'
+//   | 'SuperiorPipes'
+//   | 'AlienImprints'
+//   | 'NocturnalAdaptation'
+//   | 'GeneSelection'
+//   | 'MartianDiet'
+//   | 'EternalFusion'
+//   | 'SuperconductingComputing'
+//   | 'NanoRefinement'
+//   | 'ArtificialMuscles'
+//   | 'InspiringArchitecture'
+//   | 'GiantCrops'
+//   | 'NeoConcrete'
+//   | 'AdvancedDroneDrive'
+//   | 'DryFarming'
+//   | 'MartianSteel'
+//   | 'VectorPump'
+//   | 'Superfungus'
+//   | 'HypersensitivePhotovoltaics'
+//   | 'FrictionlessComposites'
+//   | 'ZeroSpaceComputing'
+//   | 'MultispiralArchitecture'
+//   | 'MagneticExtraction'
+//   | 'SustainedWorkload'
+//   | 'ForeverYoung'
+//   | 'MartianbornIngenuity'
+//   | 'CryoSleep'
+//   | 'Cloning'
+//   | 'GoodVibrations'
+//   | 'DomeStreamlining'
+//   | 'PrefabCompression'
+//   | 'ExtractorAI'
+//   | 'ServiceBots'
+//   | 'OverchargeAmplification'
+//   | 'PlutoniumSynthesis'
+//   | 'InterplanetaryLearning'
+//   | 'Vocation-Oriented Society'
+//   | 'PlasmaRocket'
+//   | 'AutonomousHubs'
+//   | 'FactoryAutomation'
+//   | 'GemArchitecture';

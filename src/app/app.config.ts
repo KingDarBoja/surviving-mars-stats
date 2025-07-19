@@ -1,16 +1,35 @@
 import {
   ApplicationConfig,
+  inject,
+  provideAppInitializer,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
-import { appRoutes } from './app.routes';
 import { provideNgtRenderer } from 'angular-three/dom';
+import { lastValueFrom, tap } from 'rxjs';
+
+import { appRoutes } from './app.routes';
 import { registerAgGridModules } from './ui-table/ui-table.register';
+import { LocaleService } from './services/locale.service';
 
 /** Register AG-Grid Modules by calling this function. */
 registerAgGridModules();
+
+/** Pre-load locale data on APP INIT. */
+function initializerLocaleFn() {
+  const localeService = inject(LocaleService);
+
+  console.log('APP_INITIALIZER: Fetching locale data...');
+  return lastValueFrom(
+    localeService.initializeLocaleData().pipe(
+      tap(() => {
+        console.log('APP_INITIALIZER: Preloaded locale data.');
+      }),
+    ),
+  );
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,5 +38,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(appRoutes),
     provideHttpClient(),
     provideNgtRenderer(),
+    provideAppInitializer(() => {
+      return initializerLocaleFn();
+    }),
   ],
 };

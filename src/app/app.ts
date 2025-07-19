@@ -19,7 +19,7 @@ import { LandingLocationTableComponent } from './landing-location/landing-locati
   selector: 'app-root',
   styleUrl: './app.scss',
   template: `
-    <div class="container mx-auto my-4">
+    <div class="container mx-auto py-4">
       <div class="px-4 border border-solid border-orange-200">
         <!-- <router-outlet></router-outlet> -->
         <h1 class="font-bold text-center pb-4">Surviving Mars Landing</h1>

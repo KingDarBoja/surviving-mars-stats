@@ -1,13 +1,25 @@
 import { Component, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, tap } from 'rxjs';
+import { forkJoin, map, switchMap, tap } from 'rxjs';
 import Papa from 'papaparse';
 
-import { UiTableComponent, ColDef, ColGroupDef } from '../ui-table/ui-table.component';
+import {
+  UiTableComponent,
+  ColDef,
+  ColGroupDef,
+} from '../ui-table/ui-table.component';
 import { GameIcons, ResourceIconRenderer } from './icons-renderer.component';
 import { CustomSetFilterComponent } from '../ui-table/custom-set-filter.component';
+import {
+  BreakthroughMapping,
+  BreakthroughSourceLocaleSchema,
+  type BreakthroughLocaleSchema,
+  type BreakthroughName,
+  type LandingLocationSchema,
+} from '../schemas/schemas';
+import { LocaleService } from '../services/locale.service';
 
-interface LandingLocationSchemaColumn {
+export type LandingLocationSchemaColumn = {
   /** */
   coordinates: string;
   /** */
@@ -41,58 +53,25 @@ interface LandingLocationSchemaColumn {
   /** These are fixed enum string. */
   map_name: string;
   /** These can be empty or a fixed enum string. */
-  named_location: string;
+  named_location: string | null;
   /* --------- ALL BREAKTHROUGHS --------- */
-  breakthrough_1: string;
-  breakthrough_2: string;
-  breakthrough_3: string;
-  breakthrough_4: string;
-  breakthrough_5: string;
-  breakthrough_6: string;
-  breakthrough_7: string;
-  breakthrough_8: string;
-  breakthrough_9: string;
-  breakthrough_10: string;
-  breakthrough_11: string;
-  breakthrough_12: string;
-  breakthrough_13: string;
-}
-
-/** The original csv column names. */
-interface LandingLocationSchema {
-  Coordinates: string;
-  'Latitude °': number;
-  Latitude: 'N' | 'S';
-  'Longitude °': number;
-  Longitude: 'W' | 'E';
-  Topography: 'Relatively Flat' | 'Steep' | 'Rough' | 'Mountanious';
-  'Difficulty Challenge': number;
-  Altitude: number;
-  Temperature: number;
-  Metals: number;
-  'Rare Metals': number;
-  Concrete: number;
-  Water: number;
-  'Dust Devils': number;
-  'Dust Storms': number;
-  Meteors: number;
-  'Cold Waves': number;
-  'Map Name': string;
-  'Named Location': null;
-  'Breakthrough 1': string;
-  'Breakthrough 2': string;
-  'Breakthrough 3': string;
-  'Breakthrough 4': string;
-  'Breakthrough 5': string;
-  'Breakthrough 6': string;
-  'Breakthrough 7': string;
-  'Breakthrough 8': string;
-  'Breakthrough 9': string;
-  'Breakthrough 10': string;
-  'Breakthrough 11': string;
-  'Breakthrough 12': string;
-  'Breakthrough 13': string;
-}
+  // breakthroughs: BreakthroughLocaleSchema[];
+  breakthroughs_group: {
+    breakthrough_1: BreakthroughLocaleSchema;
+    breakthrough_2: BreakthroughLocaleSchema;
+    breakthrough_3: BreakthroughLocaleSchema;
+    breakthrough_4: BreakthroughLocaleSchema;
+    breakthrough_5: BreakthroughLocaleSchema;
+    breakthrough_6: BreakthroughLocaleSchema;
+    breakthrough_7: BreakthroughLocaleSchema;
+    breakthrough_8: BreakthroughLocaleSchema;
+    breakthrough_9: BreakthroughLocaleSchema;
+    breakthrough_10: BreakthroughLocaleSchema;
+    breakthrough_11: BreakthroughLocaleSchema;
+    breakthrough_12: BreakthroughLocaleSchema;
+    breakthrough_13: BreakthroughLocaleSchema;
+  };
+};
 
 type LandingLocationColDef =
   | ColDef<LandingLocationSchemaColumn>
@@ -101,7 +80,7 @@ type LandingLocationColDef =
 @Component({
   standalone: true,
   selector: 'sms-landing-location',
-  imports: [UiTableComponent, CustomSetFilterComponent],
+  imports: [UiTableComponent],
   template: `
     <sms-ui-table
       gridId="landing-location-table"
@@ -113,6 +92,7 @@ type LandingLocationColDef =
 })
 export class LandingLocationTableComponent {
   private readonly http = inject(HttpClient);
+  private readonly localeService = inject(LocaleService);
 
   rowData = signal<LandingLocationSchemaColumn[]>([]);
   readonly colDefs: LandingLocationColDef[] = [
@@ -122,6 +102,16 @@ export class LandingLocationTableComponent {
       headerName: 'Coordinates',
       sortable: false,
       filter: false,
+    },
+    {
+      headerName: 'Breakthroughs',
+      children: [
+        {
+          field: 'breakthroughs_group.breakthrough_1.name_loc.en',
+          headerName: '1',
+          filter: { component: CustomSetFilterComponent },
+        },
+      ],
     },
     {
       headerName: 'Geography',
@@ -241,20 +231,24 @@ export class LandingLocationTableComponent {
     },
   ];
 
+  private readonly _mapLocation$ = this.http
+    .get('./data/MapData Breakthroughs.csv', { responseType: 'text' })
+    .pipe(map((csvData) => this.parseCSV<LandingLocationSchema>(csvData)));
+
+  private readonly parseCSV = <T>(csvData: string): T[] => {
+    const csv = Papa.parse<T>(csvData, {
+      skipEmptyLines: true,
+      header: true,
+      dynamicTyping: true, // Automatically convert numbers and booleans
+    });
+    return csv.data;
+  };
+
   gridReady() {
-    this.http
-      .get('./data/MapData Breakthroughs.csv', { responseType: 'text' })
+    return this._mapLocation$
       .pipe(
-        map((csvData: string) => {
-          const csv = Papa.parse<LandingLocationSchema>(csvData, {
-            skipEmptyLines: true,
-            header: true,
-            dynamicTyping: true, // Automatically convert numbers and booleans
-          });
-          return csv.data;
-        }),
-        tap((jsonRows) => {
-          this.rowData.set(this.formatRows(jsonRows));
+        tap((locationRows) => {
+          this.rowData.set(this.formatRows(locationRows));
         }),
       )
       .subscribe();
@@ -264,6 +258,15 @@ export class LandingLocationTableComponent {
     return jsonRows.map<LandingLocationSchemaColumn>((jr) => {
       const formattedLat = jr['Latitude °'].toString().padStart(2, '0');
       const formattedLong = jr['Longitude °'].toString().padStart(3, '0');
+      const btNames: BreakthroughName[] = [];
+      for (let index = 1; index <= 13; index++) {
+        const br = jr[`Breakthrough ${index}`] as BreakthroughName;
+        btNames.push(br);
+      }
+      /** Map the breakthrough name into the id + locales. */
+      const btLocales = btNames.map((btName) =>
+        this.localeService.getBreakthroughLocale(btName),
+      );
       return {
         // coordinates: jr.Coordinates,
         coordinates: `${formattedLat}${jr.Latitude}:${formattedLong}${jr.Longitude}`,
@@ -285,20 +288,15 @@ export class LandingLocationTableComponent {
         cold_waves: jr['Cold Waves'],
         map_name: jr['Map Name'],
         named_location: jr['Named Location'],
-        breakthrough_1: jr['Breakthrough 1'],
-        breakthrough_2: jr['Breakthrough 2'],
-        breakthrough_3: jr['Breakthrough 3'],
-        breakthrough_4: jr['Breakthrough 4'],
-        breakthrough_5: jr['Breakthrough 5'],
-        breakthrough_6: jr['Breakthrough 6'],
-        breakthrough_7: jr['Breakthrough 7'],
-        breakthrough_8: jr['Breakthrough 8'],
-        breakthrough_9: jr['Breakthrough 9'],
-        breakthrough_10: jr['Breakthrough 10'],
-        breakthrough_11: jr['Breakthrough 11'],
-        breakthrough_12: jr['Breakthrough 12'],
-        breakthrough_13: jr['Breakthrough 13'],
+        breakthroughs_group: btLocales.reduce(
+          (dict, locale, index) => {
+            dict[`breakthrough_${index + 1}`] = locale;
+            return dict;
+          },
+          {} as LandingLocationSchemaColumn['breakthroughs_group'],
+        ),
         /* Additional fields. */
+        // breakthroughs: btLocales,
         sum_disasters:
           jr['Dust Storms'] + jr['Dust Devils'] + jr.Meteors + jr['Cold Waves'],
         sum_resources: jr.Metals + jr.Concrete + jr.Water + jr['Rare Metals'],
