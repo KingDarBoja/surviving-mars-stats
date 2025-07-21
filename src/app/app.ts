@@ -20,12 +20,12 @@ import { LandingLocationTableComponent } from './landing-location/landing-locati
   styleUrl: './app.scss',
   template: `
     <div class="container mx-auto py-4">
-      <div class="px-4 border border-solid border-orange-200">
+      <div class="px-2 border border-solid border-orange-200">
         <!-- <router-outlet></router-outlet> -->
-        <h1 class="font-bold text-center pb-4">Surviving Mars Landing</h1>
+        <h1 class="font-bold text-center pb-4">Surviving Mars Stats</h1>
 
         <section class="flex flex-col gap-8">
-          <!-- <div id="canvas-container">
+          <div id="canvas-container">
             <ngt-canvas
               [camera]="canvasCamera"
               [lookAt]="canvasLookAt"
@@ -34,7 +34,7 @@ import { LandingLocationTableComponent } from './landing-location/landing-locati
             >
               <sms-mars-scene *canvasContent />
             </ngt-canvas>
-          </div> -->
+          </div>
 
           <sms-landing-location />
         </section>

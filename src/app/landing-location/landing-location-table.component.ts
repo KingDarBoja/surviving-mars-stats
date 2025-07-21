@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { forkJoin, map, switchMap, tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 import Papa from 'papaparse';
 
 import {
@@ -10,12 +10,10 @@ import {
 } from '../ui-table/ui-table.component';
 import { GameIcons, ResourceIconRenderer } from './icons-renderer.component';
 import { CustomSetFilterComponent } from '../ui-table/custom-set-filter.component';
-import {
-  BreakthroughMapping,
-  BreakthroughSourceLocaleSchema,
-  type BreakthroughLocaleSchema,
-  type BreakthroughName,
-  type LandingLocationSchema,
+import type {
+  BreakthroughLocaleSchema,
+  BreakthroughName,
+  LandingLocationSchema,
 } from '../schemas/schemas';
 import { LocaleService } from '../services/locale.service';
 
@@ -55,22 +53,22 @@ export type LandingLocationSchemaColumn = {
   /** These can be empty or a fixed enum string. */
   named_location: string | null;
   /* --------- ALL BREAKTHROUGHS --------- */
-  // breakthroughs: BreakthroughLocaleSchema[];
-  breakthroughs_group: {
-    breakthrough_1: BreakthroughLocaleSchema;
-    breakthrough_2: BreakthroughLocaleSchema;
-    breakthrough_3: BreakthroughLocaleSchema;
-    breakthrough_4: BreakthroughLocaleSchema;
-    breakthrough_5: BreakthroughLocaleSchema;
-    breakthrough_6: BreakthroughLocaleSchema;
-    breakthrough_7: BreakthroughLocaleSchema;
-    breakthrough_8: BreakthroughLocaleSchema;
-    breakthrough_9: BreakthroughLocaleSchema;
-    breakthrough_10: BreakthroughLocaleSchema;
-    breakthrough_11: BreakthroughLocaleSchema;
-    breakthrough_12: BreakthroughLocaleSchema;
-    breakthrough_13: BreakthroughLocaleSchema;
-  };
+  breakthroughs: BreakthroughLocaleSchema[];
+  // breakthroughs_group: {
+  //   breakthrough_1: BreakthroughLocaleSchema;
+  //   breakthrough_2: BreakthroughLocaleSchema;
+  //   breakthrough_3: BreakthroughLocaleSchema;
+  //   breakthrough_4: BreakthroughLocaleSchema;
+  //   breakthrough_5: BreakthroughLocaleSchema;
+  //   breakthrough_6: BreakthroughLocaleSchema;
+  //   breakthrough_7: BreakthroughLocaleSchema;
+  //   breakthrough_8: BreakthroughLocaleSchema;
+  //   breakthrough_9: BreakthroughLocaleSchema;
+  //   breakthrough_10: BreakthroughLocaleSchema;
+  //   breakthrough_11: BreakthroughLocaleSchema;
+  //   breakthrough_12: BreakthroughLocaleSchema;
+  //   breakthrough_13: BreakthroughLocaleSchema;
+  // };
 };
 
 type LandingLocationColDef =
@@ -82,13 +80,102 @@ type LandingLocationColDef =
   selector: 'sms-landing-location',
   imports: [UiTableComponent],
   template: `
+    <section class="grid gap-4 grid-cols-5 pb-8">
+      @let selLoc = selectedLocation();
+
+      <div
+        class="col-span-2 md:col-span-1 p-4 border border-solid border-orange-200"
+      >
+        <div class="flex flex-col gap-4 items-center justify-center h-full">
+          <h3 class="m-0">Map Name</h3>
+
+          <!-- Image goes here -->
+          <div class="h-48">
+            <img
+              class="object-scale-down max-h-full drop-shadow-md rounded-md m-auto"
+              [alt]=""
+              [src]="'https://placehold.co/240'"
+            />
+          </div>
+          <span class="">{{ selLoc ? selLoc.map_name : '---' }}</span>
+        </div>
+      </div>
+
+      <div
+        class="col-span-3 md:col-span-2 p-4 border border-solid border-orange-200"
+      >
+        <div class="flex flex-col gap-4">
+          <div class="flex flex-col sm:flex-row sm:justify-between">
+            <h4 class="w-28 m-0">Location</h4>
+            <p class="m-0 sm:text-right">
+              {{ selLoc ? selLoc.coordinates : '---' }}
+            </p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:justify-between">
+            <h4 class="w-28 m-0">Topography</h4>
+            <p class="m-0 sm:text-right">
+              {{ selLoc ? selLoc.topography : '---' }}
+            </p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:justify-between">
+            <h4 class="w-28 m-0">Altitude</h4>
+            <p class="m-0 sm:text-right">
+              {{ selLoc ? selLoc.altitude : '---' }} m.
+            </p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:justify-between">
+            <h4 class="w-28 m-0">Temperature</h4>
+            <p class="m-0" sm:text-right>
+              {{ selLoc ? selLoc.temperature : '---' }} ℃
+            </p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:justify-between">
+            <h4 class="w-28 m-0">Location</h4>
+            <p class="m-0 sm:text-right">
+              {{ selLoc ? selLoc.named_location : '---' }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="col-span-5 md:col-span-2 border border-solid border-orange-200"
+      >
+        <h3 class="text-center">Breakthroughs</h3>
+
+        <div class="bt-list flex flex-col gap-4 px-4 py-0">
+          @if (selLoc) {
+            @for (btl of selLoc.breakthroughs; track btl.id; let idx = $index) {
+              <div class="flex flex-col gap-4">
+                <h4 class="m-0">{{ btl.name_loc.en }}</h4>
+                <p class="m-0 text-justify">{{ btl.desc_loc.en }}</p>
+              </div>
+            }
+          }
+        </div>
+      </div>
+    </section>
+
     <sms-ui-table
       gridId="landing-location-table"
       [rowData]="rowData()"
       [colDefs]="colDefs"
       (gridReady)="gridReady()"
+      (rowSelected)="locationSelected($event)"
     />
   `,
+  styles: [
+    `
+      .bt-list {
+        height: 260px;
+        overflow-y: auto;
+      }
+    `,
+  ],
 })
 export class LandingLocationTableComponent {
   private readonly http = inject(HttpClient);
@@ -104,15 +191,21 @@ export class LandingLocationTableComponent {
       filter: false,
     },
     {
-      headerName: 'Breakthroughs',
-      children: [
-        {
-          field: 'breakthroughs_group.breakthrough_1.name_loc.en',
-          headerName: '1',
-          filter: { component: CustomSetFilterComponent },
-        },
-      ],
+      minWidth: 120,
+      field: 'named_location',
+      headerName: 'Named Location',
+      filter: { component: CustomSetFilterComponent },
     },
+    // {
+    //   headerName: 'Breakthroughs',
+    //   children: [
+    //     {
+    //       field: 'breakthroughs_group.breakthrough_1.name_loc.en',
+    //       headerName: '1',
+    //       filter: { component: CustomSetFilterComponent },
+    //     },
+    //   ],
+    // },
     {
       headerName: 'Geography',
       children: [
@@ -231,6 +324,8 @@ export class LandingLocationTableComponent {
     },
   ];
 
+  selectedLocation = signal<LandingLocationSchemaColumn>(undefined);
+
   private readonly _mapLocation$ = this.http
     .get('./data/MapData Breakthroughs.csv', { responseType: 'text' })
     .pipe(map((csvData) => this.parseCSV<LandingLocationSchema>(csvData)));
@@ -252,6 +347,10 @@ export class LandingLocationTableComponent {
         }),
       )
       .subscribe();
+  }
+
+  locationSelected(data: LandingLocationSchemaColumn | undefined) {
+    this.selectedLocation.set(data);
   }
 
   private formatRows(jsonRows: LandingLocationSchema[]) {
@@ -288,15 +387,15 @@ export class LandingLocationTableComponent {
         cold_waves: jr['Cold Waves'],
         map_name: jr['Map Name'],
         named_location: jr['Named Location'],
-        breakthroughs_group: btLocales.reduce(
-          (dict, locale, index) => {
-            dict[`breakthrough_${index + 1}`] = locale;
-            return dict;
-          },
-          {} as LandingLocationSchemaColumn['breakthroughs_group'],
-        ),
         /* Additional fields. */
-        // breakthroughs: btLocales,
+        breakthroughs: btLocales,
+        // breakthroughs_group: btLocales.reduce(
+        //   (dict, locale, index) => {
+        //     dict[`breakthrough_${index + 1}`] = locale;
+        //     return dict;
+        //   },
+        //   {} as LandingLocationSchemaColumn['breakthroughs_group'],
+        // ),
         sum_disasters:
           jr['Dust Storms'] + jr['Dust Devils'] + jr.Meteors + jr['Cold Waves'],
         sum_resources: jr.Metals + jr.Concrete + jr.Water + jr['Rare Metals'],

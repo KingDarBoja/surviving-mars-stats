@@ -40,7 +40,10 @@ export class LocaleService {
   // private _localeNames: BreakthroughSourceLocaleSchema[] = [];
   // private _localeDesc: BreakthroughSourceLocaleSchema[] = [];
 
-  private _breakthroughLocales!: Record<BreakthroughId, BreakthroughLocaleSchema>;
+  private _breakthroughLocales!: Record<
+    BreakthroughId,
+    BreakthroughLocaleSchema
+  >;
 
   getBreakthroughLocale(name: BreakthroughName) {
     /** Just in case we pass it without trimming. */
@@ -48,6 +51,31 @@ export class LocaleService {
     const brId = BreakthroughMapping[cleanName];
     return this._breakthroughLocales[brId];
   }
+
+  /**
+   * Inspired by the following code:
+   *
+   * https://github.com/Ocelloid/surviving-maps-3d/blob/5f25cb365e5d6ba7b9482038580c11762890e197/src/app/_components/admin/Breakthroughs.tsx#L42
+   *
+   * @param str
+   * @returns
+   */
+  private removeStyling = (str: string) => {
+    return str
+      .replaceAll('()', '')
+      .replaceAll('<color flavor>', '')
+      .replaceAll('<color em>', '')
+      .replaceAll('</color>', '')
+      .replaceAll('<right>', '')
+      .replaceAll('</right>', '')
+      .replaceAll('<left>', '')
+      .replaceAll('</left>', '')
+      .replaceAll('<hide>', '')
+      .replaceAll('</hide>', '')
+      .replaceAll(' (6<image UI/Icons/res_colonist.tga 1300> )', '')
+      .replaceAll('<image UI/Icons/res_water_2.tga 1300>', '')
+      .replaceAll('<image UI/Icons/res_temperature.tga 1300>', '');
+  };
 
   private mapBreakthroughLocale(config: {
     names: BreakthroughSourceLocaleSchema[];
@@ -65,9 +93,9 @@ export class LocaleService {
             fr: localeName.name_fr,
           },
           desc_loc: {
-            en: localeDesc.name_en,
-            br: localeDesc.name_br,
-            fr: localeDesc.name_fr,
+            en: this.removeStyling(localeDesc.name_en),
+            br: this.removeStyling(localeDesc.name_br),
+            fr: this.removeStyling(localeDesc.name_fr),
           },
         };
         return dict;

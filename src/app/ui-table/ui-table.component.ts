@@ -12,6 +12,11 @@ import type {
   DataTypeDefinition,
   GridReadyEvent,
   AbstractColDef,
+  RowSelectionOptions,
+  GridState,
+  RowSelectedEvent,
+  IRowNode,
+  GridApi,
 } from 'ag-grid-community';
 
 export type { ColDef, ColGroupDef } from 'ag-grid-community';
@@ -25,9 +30,12 @@ export type { ColDef, ColGroupDef } from 'ag-grid-community';
       style="width: 100%; height: 550px"
       [gridOptions]="gridOptions"
       [dataTypeDefinitions]="dataTypeDefinitions"
+      [rowSelection]="rowSelection()"
+      [initialState]="initialState()"
       [rowData]="rowData()"
       [columnDefs]="colDefs()"
       (gridReady)="gridReadyEvent($event)"
+      (rowSelected)="rowSelectedEvent($event)"
     />
   `,
 })
@@ -44,8 +52,49 @@ export class UiTableComponent<TData = any> {
   readonly gridReady = output<GridReadyEvent>();
 
   /** */
+  readonly rowSelected = output<TData | undefined>();
+
+  readonly initialState = input<GridState | undefined>();
+
+  readonly rowSelection = input<RowSelectionOptions | "single" | "multiple">({
+    mode: "singleRow",
+    // checkboxes: false,
+    enableClickSelection: true,
+  });
+
+  /** */
   protected gridReadyEvent(params: GridReadyEvent) {
+    this._gridApi = params.api; // Store the grid API
     this.gridReady.emit(params);
+  }
+
+  private _gridApi!: GridApi;
+
+
+  /** 
+   * Emit the row selected data.
+   * 
+   * When `isSelected()` is true, the row was selected, otherwise deselected.
+   * 
+   * https://www.ag-grid.com/angular-data-grid/row-selection-api-reference/#reference-selection-rowSelected
+   */
+  protected rowSelectedEvent({ node, data }: RowSelectedEvent<TData>) {
+    /* Ensure gridApi is available. */
+    if (!this._gridApi) {
+      return;
+    }
+
+    /* Get all currently selected row nodes. */
+    const selectedNodes = this._gridApi.getSelectedNodes();
+
+    if (node.isSelected()) {
+      this.rowSelected.emit(data);
+    } else {
+      /* Row was deselected. If no other rows are selected, emit undefined. */
+      if (selectedNodes.length === 0) {
+        this.rowSelected.emit(undefined);
+      }
+    }
   }
 
   /** Default grid options for this table (global). */
@@ -80,6 +129,7 @@ export class UiTableComponent<TData = any> {
       },
     },
     pagination: true,
+    suppressCellFocus: false, 
   };
 
   constructor() {

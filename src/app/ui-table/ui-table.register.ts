@@ -15,14 +15,14 @@ import {
 
 export const registerAgGridModules = () => {
   ModuleRegistry.registerModules([
-    CustomFilterModule,
-    RowApiModule,
     CellStyleModule,
     ClientSideRowModelModule,
+    CustomFilterModule,
     NumberFilterModule,
     PaginationModule,
     PinnedRowModule,
     QuickFilterModule,
+    RowApiModule,
     RowSelectionModule,
     RowStyleModule,
     TextFilterModule,

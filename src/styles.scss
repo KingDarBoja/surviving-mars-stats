@@ -3,17 +3,17 @@
 // components according to the Material 3 design spec.
 // Learn more about theming and how to use it for your application's
 // custom components at https://material.angular.dev/guide/theming
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 html {
   @include mat.theme(
     (
       color: (
         primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
+        tertiary: mat.$blue-palette
       ),
       typography: Roboto,
-      density: 0,
+      density: 0
     )
   );
 
@@ -53,11 +53,46 @@ html {
 }
 
 /* -------------- End custom styles for header and cell for ag-grid table -------------- */
+
 html,
 body {
   height: 100%;
 }
 body {
   margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+
+  --sb-track-color: #ffc8a8;
+  --sb-thumb-color: #bd5417;
+  --sb-thumb-hover-color: #A2420B;
+  --sb-size: 10px;
+}
+
+/** -------- Scrollbar -------- **/
+
+/* width */
+::-webkit-scrollbar {
+  width: var(--sb-size);
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  // border-radius: 4px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  // border-radius: 4px;
+
+  &:hover {
+    background: var(--sb-thumb-hover-color);
+  }
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  body {
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+  }
 }
