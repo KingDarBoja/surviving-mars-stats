@@ -15,7 +15,6 @@ import type {
   RowSelectionOptions,
   GridState,
   RowSelectedEvent,
-  IRowNode,
   GridApi,
 } from 'ag-grid-community';
 

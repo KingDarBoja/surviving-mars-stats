@@ -9,7 +9,7 @@ import {
   ColGroupDef,
 } from '../ui-table/ui-table.component';
 import { GameIcons, ResourceIconRenderer } from './icons-renderer.component';
-import { CustomSetFilterComponent } from '../ui-table/custom-set-filter.component';
+import { CustomArrayFilterComponent, CustomSetFilterComponent } from '../ui-table';
 import type {
   BreakthroughLocaleSchema,
   BreakthroughName,
@@ -54,6 +54,7 @@ export type LandingLocationSchemaColumn = {
   named_location: string | null;
   /* --------- ALL BREAKTHROUGHS --------- */
   breakthroughs: BreakthroughLocaleSchema[];
+  breakthroughs_view: string[];
   // breakthroughs_group: {
   //   breakthrough_1: BreakthroughLocaleSchema;
   //   breakthrough_2: BreakthroughLocaleSchema;
@@ -152,7 +153,7 @@ type LandingLocationColDef =
             @for (btl of selLoc.breakthroughs; track btl.id; let idx = $index) {
               <div class="flex flex-col gap-4">
                 <h4 class="m-0">{{ btl.name_loc.en }}</h4>
-                <p class="m-0 text-justify">{{ btl.desc_loc.en }}</p>
+                <!-- <p class="m-0 text-justify">{{ btl.desc_loc.en }}</p> -->
               </div>
             }
           }
@@ -184,17 +185,24 @@ export class LandingLocationTableComponent {
   rowData = signal<LandingLocationSchemaColumn[]>([]);
   readonly colDefs: LandingLocationColDef[] = [
     {
-      minWidth: 120,
+      minWidth: 140,
       field: 'coordinates',
       headerName: 'Coordinates',
       sortable: false,
-      filter: false,
+      filter: true,
     },
     {
       minWidth: 120,
       field: 'named_location',
       headerName: 'Named Location',
       filter: { component: CustomSetFilterComponent },
+    },
+    {
+      minWidth: 120,
+      field: 'breakthroughs_view',
+      headerName: 'Breakthroughs',
+      filter: { component: CustomArrayFilterComponent },
+      valueFormatter: params => (params.value as string[]).join(', '),
     },
     // {
     //   headerName: 'Breakthroughs',
@@ -327,7 +335,7 @@ export class LandingLocationTableComponent {
   selectedLocation = signal<LandingLocationSchemaColumn>(undefined);
 
   private readonly _mapLocation$ = this.http
-    .get('./data/MapData Breakthroughs.csv', { responseType: 'text' })
+    .get('./data/MapData-Breakthroughs_GP-BB_20.csv', { responseType: 'text' })
     .pipe(map((csvData) => this.parseCSV<LandingLocationSchema>(csvData)));
 
   private readonly parseCSV = <T>(csvData: string): T[] => {
@@ -358,7 +366,7 @@ export class LandingLocationTableComponent {
       const formattedLat = jr['Latitude °'].toString().padStart(2, '0');
       const formattedLong = jr['Longitude °'].toString().padStart(3, '0');
       const btNames: BreakthroughName[] = [];
-      for (let index = 1; index <= 13; index++) {
+      for (let index = 1; index <= 20; index++) {
         const br = jr[`Breakthrough ${index}`] as BreakthroughName;
         btNames.push(br);
       }
@@ -389,6 +397,7 @@ export class LandingLocationTableComponent {
         named_location: jr['Named Location'],
         /* Additional fields. */
         breakthroughs: btLocales,
+        breakthroughs_view: btLocales.map(x => x.name_loc.en),
         // breakthroughs_group: btLocales.reduce(
         //   (dict, locale, index) => {
         //     dict[`breakthrough_${index + 1}`] = locale;

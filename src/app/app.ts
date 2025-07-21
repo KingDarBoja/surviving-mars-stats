@@ -25,7 +25,7 @@ import { LandingLocationTableComponent } from './landing-location/landing-locati
         <h1 class="font-bold text-center pb-4">Surviving Mars Stats</h1>
 
         <section class="flex flex-col gap-8">
-          <div id="canvas-container">
+          <!-- <div id="canvas-container">
             <ngt-canvas
               [camera]="canvasCamera"
               [lookAt]="canvasLookAt"
@@ -34,7 +34,7 @@ import { LandingLocationTableComponent } from './landing-location/landing-locati
             >
               <sms-mars-scene *canvasContent />
             </ngt-canvas>
-          </div>
+          </div> -->
 
           <sms-landing-location />
         </section>
