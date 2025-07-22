@@ -102,6 +102,14 @@ body {
   @apply border border-solid border-orange-200;
 }
 
+.sms-border-top {
+  @apply border-t border-solid border-orange-200;
+
+  border-left-width: 0;
+  border-right-width: 0;
+  border-bottom-width: 0;
+}
+
 .sms-image {
   @apply object-scale-down max-w-full rounded-md m-auto border-2 border-solid border-orange-500;
 

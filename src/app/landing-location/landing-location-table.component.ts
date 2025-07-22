@@ -13,65 +13,17 @@ import {
   CustomArrayFilterComponent,
   CustomSetFilterComponent,
 } from '../ui-table';
-import type {
-  BreakthroughLocaleSchema,
-  BreakthroughName,
-  LandingLocationSchema,
+import {
+  BreakthroughIcon,
+  type BreakthroughLocaleSchema,
+  type BreakthroughName,
+  type LandingLocationSchema,
 } from '../schemas';
 import { LocaleService } from '../services/locale.service';
 import {
-  SurvivingMarsMapId,
-  SurvivingMarsMapName,
+  SurvivingMarsMapNameI18N,
+  type SurvivingMarsMapId,
 } from '../schemas/map-name-schemas';
-
-/** @TODO Implement transloco. */
-const SurvivingMarsMapNameI18N = {
-  [SurvivingMarsMapName.BlankBig_01]: 'Big 01',
-  [SurvivingMarsMapName.BlankBig_02]: 'Big 02',
-  [SurvivingMarsMapName.BlankBig_03]: 'Big 03',
-  [SurvivingMarsMapName.BlankBig_04]: 'Big 04',
-  [SurvivingMarsMapName.BlankBigCanyonCMix_01]: 'Big Canyon Mix 01',
-  [SurvivingMarsMapName.BlankBigCanyonCMix_02]: 'Big Canyon Mix 02',
-  [SurvivingMarsMapName.BlankBigCanyonCMix_03]: 'Big Canyon Mix 03',
-  [SurvivingMarsMapName.BlankBigCanyonCMix_04]: 'Big Canyon Mix 04',
-  [SurvivingMarsMapName.BlankBigCanyonCMix_05]: 'Big Canyon Mix 05',
-  [SurvivingMarsMapName.BlankBigCanyonCMix_06]: 'Big Canyon Mix 06',
-  [SurvivingMarsMapName.BlankBigCanyonCMix_07]: 'Big Canyon Mix 07',
-  [SurvivingMarsMapName.BlankBigCanyonCMix_08]: 'Big Canyon Mix 08',
-  [SurvivingMarsMapName.BlankBigCanyonCMix_09]: 'Big Canyon Mix 09',
-  [SurvivingMarsMapName.BlankBigCanyonCMix_10]: 'Big Canyon Mix 10',
-  [SurvivingMarsMapName.BlankBigCliffsCMix_01]: 'Big Cliffs Mix 01',
-  [SurvivingMarsMapName.BlankBigCliffsCMix_02]: 'Big Cliffs Mix 02',
-  [SurvivingMarsMapName.BlankBigCrater_01]: 'Big Crater 01',
-  [SurvivingMarsMapName.BlankBigCraterCMix_01]: 'Big Crater Mix 01',
-  [SurvivingMarsMapName.BlankBigCraterCMix_02]: 'Big Crater Mix 02',
-  [SurvivingMarsMapName.BlankBigHeartCMix_03]: 'Big Hear Mix 03',
-  [SurvivingMarsMapName.BlankBigTerraceCMix_01]: 'Big Terrace Mix 01',
-  [SurvivingMarsMapName.BlankBigTerraceCMix_02]: 'Big Terrace Mix 02',
-  [SurvivingMarsMapName.BlankBigTerraceCMix_03]: 'Big Terrace Mix 03',
-  [SurvivingMarsMapName.BlankBigTerraceCMix_04]: 'Big Terrace Mix 04',
-  [SurvivingMarsMapName.BlankBigTerraceCMix_05]: 'Big Terrace Mix 05',
-  [SurvivingMarsMapName.BlankBigTerraceCMix_06]: 'Big Terrace Mix 06',
-  [SurvivingMarsMapName.BlankBigTerraceCMix_07]: 'Big Terrace Mix 07',
-  [SurvivingMarsMapName.BlankBigTerraceCMix_08]: 'Big Terrace Mix 08',
-  [SurvivingMarsMapName.BlankBigTerraceCMix_09]: 'Big Terrace Mix 09',
-  [SurvivingMarsMapName.BlankBigTerraceCMix_10]: 'Big Terrace Mix 10',
-  [SurvivingMarsMapName.BlankBigTerraceCMix_11]: 'Big Terrace Mix 11',
-  [SurvivingMarsMapName.BlankBigTerraceCMix_12]: 'Big Terrace Mix 12',
-  [SurvivingMarsMapName.BlankBigTerraceCMix_13]: 'Big Terrace Mix 13',
-  [SurvivingMarsMapName.BlankBigTerraceCMix_14]: 'Big Terrace Mix 14',
-  [SurvivingMarsMapName.BlankBigTerraceCMix_15]: 'Big Terrace Mix 15',
-  [SurvivingMarsMapName.BlankBigTerraceCMix_16]: 'Big Terrace Mix 16',
-  [SurvivingMarsMapName.BlankBigTerraceCMix_17]: 'Big Terrace Mix 17',
-  [SurvivingMarsMapName.BlankBigTerraceCMix_18]: 'Big Terrace Mix 18',
-  [SurvivingMarsMapName.BlankBigTerraceCMix_19]: 'Big Terrace Mix 19',
-  [SurvivingMarsMapName.BlankBigTerraceCMix_20]: 'Big Terrace Mix 20',
-  [SurvivingMarsMapName.BlankTerraceBig_05]: 'Big Terrace 05',
-  [SurvivingMarsMapName.BlankUnderground_01]: 'Underground 01',
-  [SurvivingMarsMapName.BlankUnderground_02]: 'Underground 02',
-  [SurvivingMarsMapName.BlankUnderground_03]: 'Underground 03',
-  [SurvivingMarsMapName.BlankUnderground_04]: 'Underground 04',
-} as const;
 
 type LandingLocationSchemaColumn = {
   /** */
@@ -143,7 +95,6 @@ type LandingLocationColDef =
   selector: 'sms-landing-location',
   imports: [UiTableComponent],
   template: `
-
     <section class="grid gap-4 grid-cols-5 pb-8">
       @let selLoc = selectedLocation();
 
@@ -168,7 +119,9 @@ type LandingLocationColDef =
               />
             }
           </div>
-          <span class="text-sm font-bold">{{ selLoc ? selLoc.map_name_view : '---' }}</span>
+          <span class="text-sm font-bold">{{
+            selLoc ? selLoc.map_name_view : '---'
+          }}</span>
         </div>
         <div class="flex flex-col gap-1">
           <div class="flex flex-col sm:flex-row sm:justify-between">
@@ -211,12 +164,19 @@ type LandingLocationColDef =
       <div class="col-span-5 md:col-span-3 sms-border">
         <h3 class="text-center">Breakthroughs</h3>
 
-        <div class="bt-list flex flex-col gap-4 px-4 py-0">
+        <div class="bt-list flex flex-col py-0">
           @if (selLoc) {
             @for (btl of selLoc.breakthroughs; track btl.id; let idx = $index) {
-              <div class="flex flex-col gap-1">
-                <h4 class="m-0">{{ btl.name_loc.en }}</h4>
-                <p class="m-0 text-justify text-sm">{{ btl.desc_loc.en }}</p>
+              <div class="flex p-4 gap-4 sms-border-top">
+                <img
+                  class="bt-icon"
+                  [alt]="btl.name_loc.en"
+                  [src]="'icons/research/' + breakthroughIcon[btl.id] + '.png'"
+                />
+                <div class="flex flex-col gap-1">
+                  <h4 class="m-0">{{ btl.name_loc.en }}</h4>
+                  <p class="m-0 text-justify text-sm">{{ btl.desc_loc.en }}</p>
+                </div>
               </div>
             }
           }
@@ -238,10 +198,17 @@ type LandingLocationColDef =
         max-height: 380px;
         overflow-y: auto;
       }
+
+      .bt-icon {
+        width: 64px;
+        object-fit: contain;
+      }
     `,
   ],
 })
 export class LandingLocationTableComponent {
+  readonly breakthroughIcon = BreakthroughIcon;
+
   private readonly http = inject(HttpClient);
   private readonly localeService = inject(LocaleService);
 
@@ -261,7 +228,7 @@ export class LandingLocationTableComponent {
       filter: { component: CustomSetFilterComponent },
     },
     {
-      minWidth: 120,
+      minWidth: 160,
       field: 'breakthroughs_view',
       headerName: 'Breakthroughs',
       filter: { component: CustomArrayFilterComponent },
