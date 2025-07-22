@@ -1,3 +1,5 @@
+import { LocaleSchema } from "./locale-schemas";
+
 /** The locale breakthrough desc csv column. */
 export type BreakthroughSourceLocaleSchema = {
   break_id: BreakthroughId;
@@ -80,52 +82,10 @@ export type BreakthroughName = keyof typeof BreakthroughMapping;
 export type BreakthroughId =
   (typeof BreakthroughMapping)[keyof typeof BreakthroughMapping];
 
-export type LocaleSchema = {
-  en: string;
-  br: string;
-  fr: string;
-};
-
 export type BreakthroughLocaleSchema = {
   id: string;
   name_loc: LocaleSchema;
   desc_loc: LocaleSchema;
-};
-
-/** The original csv column names. */
-export type LandingLocationSchema = {
-  Coordinates: string;
-  'Latitude °': number;
-  Latitude: 'N' | 'S';
-  'Longitude °': number;
-  Longitude: 'W' | 'E';
-  Topography: 'Relatively Flat' | 'Steep' | 'Rough' | 'Mountanious';
-  'Difficulty Challenge': number;
-  Altitude: number;
-  Temperature: number;
-  Metals: number;
-  'Rare Metals': number;
-  Concrete: number;
-  Water: number;
-  'Dust Devils': number;
-  'Dust Storms': number;
-  Meteors: number;
-  'Cold Waves': number;
-  'Map Name': string;
-  'Named Location': string | null;
-  'Breakthrough 1': BreakthroughName;
-  'Breakthrough 2': BreakthroughName;
-  'Breakthrough 3': BreakthroughName;
-  'Breakthrough 4': BreakthroughName;
-  'Breakthrough 5': BreakthroughName;
-  'Breakthrough 6': BreakthroughName;
-  'Breakthrough 7': BreakthroughName;
-  'Breakthrough 8': BreakthroughName;
-  'Breakthrough 9': BreakthroughName;
-  'Breakthrough 10': BreakthroughName;
-  'Breakthrough 11': BreakthroughName;
-  'Breakthrough 12': BreakthroughName;
-  'Breakthrough 13': BreakthroughName;
 };
 
 // type BreakthroughId =

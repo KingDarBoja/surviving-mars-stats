@@ -1,18 +1,18 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
-  BreakthroughId,
-  BreakthroughLocaleSchema,
   BreakthroughMapping,
-  BreakthroughName,
-  BreakthroughSourceLocaleSchema,
-} from '../schemas/schemas';
+  type BreakthroughId,
+  type BreakthroughLocaleSchema,
+  type BreakthroughName,
+  type BreakthroughSourceLocaleSchema,
+} from '../schemas';
 import { forkJoin, map, tap } from 'rxjs';
 import Papa from 'papaparse';
 
 @Injectable({ providedIn: 'root' })
 export class LocaleService {
-  private httpClient = inject(HttpClient);
+  private readonly httpClient = inject(HttpClient);
 
   private readonly _localeBreakName$ = this.httpClient
     .get('./data/locale/bt_names.csv', {

@@ -9,15 +9,71 @@ import {
   ColGroupDef,
 } from '../ui-table/ui-table.component';
 import { GameIcons, ResourceIconRenderer } from './icons-renderer.component';
-import { CustomArrayFilterComponent, CustomSetFilterComponent } from '../ui-table';
+import {
+  CustomArrayFilterComponent,
+  CustomSetFilterComponent,
+} from '../ui-table';
 import type {
   BreakthroughLocaleSchema,
   BreakthroughName,
   LandingLocationSchema,
-} from '../schemas/schemas';
+} from '../schemas';
 import { LocaleService } from '../services/locale.service';
+import {
+  SurvivingMarsMapId,
+  SurvivingMarsMapName,
+} from '../schemas/map-name-schemas';
 
-export type LandingLocationSchemaColumn = {
+/** @TODO Implement transloco. */
+const SurvivingMarsMapNameI18N = {
+  [SurvivingMarsMapName.BlankBig_01]: 'Big 01',
+  [SurvivingMarsMapName.BlankBig_02]: 'Big 02',
+  [SurvivingMarsMapName.BlankBig_03]: 'Big 03',
+  [SurvivingMarsMapName.BlankBig_04]: 'Big 04',
+  [SurvivingMarsMapName.BlankBigCanyonCMix_01]: 'Big Canyon Mix 01',
+  [SurvivingMarsMapName.BlankBigCanyonCMix_02]: 'Big Canyon Mix 02',
+  [SurvivingMarsMapName.BlankBigCanyonCMix_03]: 'Big Canyon Mix 03',
+  [SurvivingMarsMapName.BlankBigCanyonCMix_04]: 'Big Canyon Mix 04',
+  [SurvivingMarsMapName.BlankBigCanyonCMix_05]: 'Big Canyon Mix 05',
+  [SurvivingMarsMapName.BlankBigCanyonCMix_06]: 'Big Canyon Mix 06',
+  [SurvivingMarsMapName.BlankBigCanyonCMix_07]: 'Big Canyon Mix 07',
+  [SurvivingMarsMapName.BlankBigCanyonCMix_08]: 'Big Canyon Mix 08',
+  [SurvivingMarsMapName.BlankBigCanyonCMix_09]: 'Big Canyon Mix 09',
+  [SurvivingMarsMapName.BlankBigCanyonCMix_10]: 'Big Canyon Mix 10',
+  [SurvivingMarsMapName.BlankBigCliffsCMix_01]: 'Big Cliffs Mix 01',
+  [SurvivingMarsMapName.BlankBigCliffsCMix_02]: 'Big Cliffs Mix 02',
+  [SurvivingMarsMapName.BlankBigCrater_01]: 'Big Crater 01',
+  [SurvivingMarsMapName.BlankBigCraterCMix_01]: 'Big Crater Mix 01',
+  [SurvivingMarsMapName.BlankBigCraterCMix_02]: 'Big Crater Mix 02',
+  [SurvivingMarsMapName.BlankBigHeartCMix_03]: 'Big Hear Mix 03',
+  [SurvivingMarsMapName.BlankBigTerraceCMix_01]: 'Big Terrace Mix 01',
+  [SurvivingMarsMapName.BlankBigTerraceCMix_02]: 'Big Terrace Mix 02',
+  [SurvivingMarsMapName.BlankBigTerraceCMix_03]: 'Big Terrace Mix 03',
+  [SurvivingMarsMapName.BlankBigTerraceCMix_04]: 'Big Terrace Mix 04',
+  [SurvivingMarsMapName.BlankBigTerraceCMix_05]: 'Big Terrace Mix 05',
+  [SurvivingMarsMapName.BlankBigTerraceCMix_06]: 'Big Terrace Mix 06',
+  [SurvivingMarsMapName.BlankBigTerraceCMix_07]: 'Big Terrace Mix 07',
+  [SurvivingMarsMapName.BlankBigTerraceCMix_08]: 'Big Terrace Mix 08',
+  [SurvivingMarsMapName.BlankBigTerraceCMix_09]: 'Big Terrace Mix 09',
+  [SurvivingMarsMapName.BlankBigTerraceCMix_10]: 'Big Terrace Mix 10',
+  [SurvivingMarsMapName.BlankBigTerraceCMix_11]: 'Big Terrace Mix 11',
+  [SurvivingMarsMapName.BlankBigTerraceCMix_12]: 'Big Terrace Mix 12',
+  [SurvivingMarsMapName.BlankBigTerraceCMix_13]: 'Big Terrace Mix 13',
+  [SurvivingMarsMapName.BlankBigTerraceCMix_14]: 'Big Terrace Mix 14',
+  [SurvivingMarsMapName.BlankBigTerraceCMix_15]: 'Big Terrace Mix 15',
+  [SurvivingMarsMapName.BlankBigTerraceCMix_16]: 'Big Terrace Mix 16',
+  [SurvivingMarsMapName.BlankBigTerraceCMix_17]: 'Big Terrace Mix 17',
+  [SurvivingMarsMapName.BlankBigTerraceCMix_18]: 'Big Terrace Mix 18',
+  [SurvivingMarsMapName.BlankBigTerraceCMix_19]: 'Big Terrace Mix 19',
+  [SurvivingMarsMapName.BlankBigTerraceCMix_20]: 'Big Terrace Mix 20',
+  [SurvivingMarsMapName.BlankTerraceBig_05]: 'Big Terrace 05',
+  [SurvivingMarsMapName.BlankUnderground_01]: 'Underground 01',
+  [SurvivingMarsMapName.BlankUnderground_02]: 'Underground 02',
+  [SurvivingMarsMapName.BlankUnderground_03]: 'Underground 03',
+  [SurvivingMarsMapName.BlankUnderground_04]: 'Underground 04',
+} as const;
+
+type LandingLocationSchemaColumn = {
   /** */
   coordinates: string;
   /** */
@@ -49,7 +105,13 @@ export type LandingLocationSchemaColumn = {
   meteors: number;
   cold_waves: number;
   /** These are fixed enum string. */
-  map_name: string;
+  map_name: SurvivingMarsMapId;
+  /**
+   * English map name.
+   *
+   * @TODO implement transloco for switching languages.
+   */
+  map_name_view: string;
   /** These can be empty or a fixed enum string. */
   named_location: string | null;
   /* --------- ALL BREAKTHROUGHS --------- */
@@ -81,79 +143,80 @@ type LandingLocationColDef =
   selector: 'sms-landing-location',
   imports: [UiTableComponent],
   template: `
+
     <section class="grid gap-4 grid-cols-5 pb-8">
       @let selLoc = selectedLocation();
 
-      <div
-        class="col-span-2 md:col-span-1 p-4 border border-solid border-orange-200"
-      >
-        <div class="flex flex-col gap-4 items-center justify-center h-full">
+      <div class="col-span-5 md:col-span-2 p-4 sms-border">
+        <div class="flex flex-col gap-1 items-center justify-center pb-4">
           <h3 class="m-0">Map Name</h3>
 
           <!-- Image goes here -->
-          <div class="h-48">
-            <img
-              class="object-scale-down max-h-full drop-shadow-md rounded-md m-auto"
-              [alt]=""
-              [src]="'https://placehold.co/240'"
-            />
+          <div class="landing-map">
+            @if (selLoc) {
+              <img
+                class="sms-image"
+                [alt]="selLoc.map_name_view"
+                [src]="'images/maps/' + selLoc.map_name + '.png'"
+              />
+            } @else {
+              <!-- Placeholder image -->
+              <img
+                class="sms-image"
+                [alt]="'placeholder map'"
+                [src]="'https://placehold.co/240x160'"
+              />
+            }
           </div>
-          <span class="">{{ selLoc ? selLoc.map_name : '---' }}</span>
+          <span class="text-sm font-bold">{{ selLoc ? selLoc.map_name_view : '---' }}</span>
         </div>
-      </div>
-
-      <div
-        class="col-span-3 md:col-span-2 p-4 border border-solid border-orange-200"
-      >
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-1">
           <div class="flex flex-col sm:flex-row sm:justify-between">
-            <h4 class="w-28 m-0">Location</h4>
-            <p class="m-0 sm:text-right">
+            <h5 class="w-28 m-0">Location</h5>
+            <p class="m-0 sm:text-right text-sm">
               {{ selLoc ? selLoc.coordinates : '---' }}
             </p>
           </div>
 
           <div class="flex flex-col sm:flex-row sm:justify-between">
-            <h4 class="w-28 m-0">Topography</h4>
-            <p class="m-0 sm:text-right">
+            <h5 class="w-28 m-0">Topography</h5>
+            <p class="m-0 sm:text-right text-sm">
               {{ selLoc ? selLoc.topography : '---' }}
             </p>
           </div>
 
           <div class="flex flex-col sm:flex-row sm:justify-between">
-            <h4 class="w-28 m-0">Altitude</h4>
-            <p class="m-0 sm:text-right">
+            <h5 class="w-28 m-0">Altitude</h5>
+            <p class="m-0 sm:text-right text-sm">
               {{ selLoc ? selLoc.altitude : '---' }} m.
             </p>
           </div>
 
           <div class="flex flex-col sm:flex-row sm:justify-between">
-            <h4 class="w-28 m-0">Temperature</h4>
-            <p class="m-0" sm:text-right>
+            <h5 class="w-28 m-0">Temperature</h5>
+            <p class="m-0 sm:text-right text-sm">
               {{ selLoc ? selLoc.temperature : '---' }} ℃
             </p>
           </div>
 
           <div class="flex flex-col sm:flex-row sm:justify-between">
-            <h4 class="w-28 m-0">Location</h4>
-            <p class="m-0 sm:text-right">
+            <h5 class="w-28 m-0">Location</h5>
+            <p class="m-0 sm:text-right text-sm">
               {{ selLoc ? selLoc.named_location : '---' }}
             </p>
           </div>
         </div>
       </div>
 
-      <div
-        class="col-span-5 md:col-span-2 border border-solid border-orange-200"
-      >
+      <div class="col-span-5 md:col-span-3 sms-border">
         <h3 class="text-center">Breakthroughs</h3>
 
         <div class="bt-list flex flex-col gap-4 px-4 py-0">
           @if (selLoc) {
             @for (btl of selLoc.breakthroughs; track btl.id; let idx = $index) {
-              <div class="flex flex-col gap-4">
+              <div class="flex flex-col gap-1">
                 <h4 class="m-0">{{ btl.name_loc.en }}</h4>
-                <!-- <p class="m-0 text-justify">{{ btl.desc_loc.en }}</p> -->
+                <p class="m-0 text-justify text-sm">{{ btl.desc_loc.en }}</p>
               </div>
             }
           }
@@ -172,7 +235,7 @@ type LandingLocationColDef =
   styles: [
     `
       .bt-list {
-        height: 260px;
+        max-height: 380px;
         overflow-y: auto;
       }
     `,
@@ -202,7 +265,7 @@ export class LandingLocationTableComponent {
       field: 'breakthroughs_view',
       headerName: 'Breakthroughs',
       filter: { component: CustomArrayFilterComponent },
-      valueFormatter: params => (params.value as string[]).join(', '),
+      valueFormatter: (params) => (params.value as string[]).join(', '),
     },
     // {
     //   headerName: 'Breakthroughs',
@@ -367,8 +430,11 @@ export class LandingLocationTableComponent {
       const formattedLong = jr['Longitude °'].toString().padStart(3, '0');
       const btNames: BreakthroughName[] = [];
       for (let index = 1; index <= 20; index++) {
-        const br = jr[`Breakthrough ${index}`] as BreakthroughName;
-        btNames.push(br);
+        const br = jr[`Breakthrough ${index}`] as BreakthroughName | undefined;
+        /** Make sure we push only existing breakthrough columns. */
+        if (br) {
+          btNames.push(br);
+        }
       }
       /** Map the breakthrough name into the id + locales. */
       const btLocales = btNames.map((btName) =>
@@ -394,10 +460,11 @@ export class LandingLocationTableComponent {
         meteors: jr.Meteors,
         cold_waves: jr['Cold Waves'],
         map_name: jr['Map Name'],
+        map_name_view: SurvivingMarsMapNameI18N[jr['Map Name']],
         named_location: jr['Named Location'],
         /* Additional fields. */
         breakthroughs: btLocales,
-        breakthroughs_view: btLocales.map(x => x.name_loc.en),
+        breakthroughs_view: btLocales.map((x) => x.name_loc.en),
         // breakthroughs_group: btLocales.reduce(
         //   (dict, locale, index) => {
         //     dict[`breakthrough_${index + 1}`] = locale;
