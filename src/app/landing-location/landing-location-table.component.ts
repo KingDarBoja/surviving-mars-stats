@@ -98,9 +98,9 @@ type LandingLocationColDef =
     <section class="grid gap-4 grid-cols-5 pb-8">
       @let selLoc = selectedLocation();
 
-      <div class="col-span-5 md:col-span-2 p-4 sms-border">
-        <div class="flex flex-col gap-1 items-center justify-center pb-4">
-          <h3 class="m-0">Map Name</h3>
+      <div class="col-span-5 md:col-span-2 sms-border">
+        <h3 class="m-0 p-2 text-center bg-orange-200">Map Name</h3>
+        <div class="flex flex-col gap-1 items-center justify-center p-4">
 
           <!-- Image goes here -->
           <div class="landing-map">
@@ -123,7 +123,7 @@ type LandingLocationColDef =
             selLoc ? selLoc.map_name_view : '---'
           }}</span>
         </div>
-        <div class="flex flex-col gap-1">
+        <div class="flex flex-col gap-1 px-4">
           <div class="flex flex-col sm:flex-row sm:justify-between">
             <h5 class="w-28 m-0">Location</h5>
             <p class="m-0 sm:text-right text-sm">
@@ -162,7 +162,7 @@ type LandingLocationColDef =
       </div>
 
       <div class="col-span-5 md:col-span-3 sms-border">
-        <h3 class="text-center">Breakthroughs</h3>
+        <h3 class="m-0 p-2 text-center bg-orange-200">Breakthroughs</h3>
 
         <div class="bt-list flex flex-col py-0">
           @if (selLoc) {

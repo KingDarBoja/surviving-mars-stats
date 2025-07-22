@@ -153,7 +153,7 @@ export enum BreakthroughIcon {
   SustainedWorkload = 'sustainable_overtime',
   ThePositronicBrain = 'the_positronic_brain',
   VectorPump = 'vector_pump',
-  VehicleWeightOptimizations = 'vehicle_weight_optimizations',
+  VehicleWeightOptimizations = 'vehicle_optimization',
   'Vocation-Oriented Society' = 'vocation-oriented_society',
   WirelessPower = 'wireless_power',
   ZeroSpaceComputing = 'zero-space_computing',

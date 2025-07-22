@@ -14,7 +14,7 @@ import { MatListModule } from '@angular/material/list';
     <mat-list class="custom-set-filter-container">
       @for (value of sortedUniqueValues; track value) {
         <!-- <div class="custom-filter-item"> -->
-        <mat-list-item>
+        <mat-list-item [class.selected-option]="selectedValues.has(value)">
           <mat-checkbox
             [id]="value"
             [checked]="selectedValues.has(value)"

@@ -12,34 +12,22 @@ import { IFilterParams, IDoesFilterPassParams } from 'ag-grid-community';
   standalone: true,
   template: `
     <div class="flex flex-col overflow-hidden">
-        <mat-list class="custom-array-filter-container" cdkScrollable>
-          @for (option of predefinedOptions; track option) {
-            <!-- <div class="custom-filter-item"> -->
-            <mat-list-item>
-              <mat-checkbox
-                [id]="option"
-                [value]="option"
-                [checked]="selectedOptions.includes(option)"
-                (change)="onCheckboxChange(option, $event.checked)"
-              />
-              <label [for]="option">{{ option }}</label>
-              <!-- </div> -->
-            </mat-list-item>
-          }
-          <!-- </div> -->
-        </mat-list>
-      <!-- 
-      <div *ngFor="let option of predefinedOptions">
-        <label>
-          <input
-            type="checkbox"
-            [value]="option"
-            [checked]="selectedOptions.includes(option)"
-            (change)="onCheckboxChange(option, $event.target.checked)"
-          />
-          {{ option }}
-        </label>
-      </div> -->
+      <mat-list class="custom-array-filter-container" cdkScrollable>
+        @for (option of predefinedOptions; track option) {
+          <!-- <div class="custom-filter-item"> -->
+          <mat-list-item [class.selected-option]="selectedOptions.includes(option)">
+            <mat-checkbox
+              [id]="option"
+              [value]="option"
+              [checked]="selectedOptions.includes(option)"
+              (change)="onCheckboxChange(option, $event.checked)"
+            />
+            <label [for]="option">{{ option }}</label>
+            <!-- </div> -->
+          </mat-list-item>
+        }
+        <!-- </div> -->
+      </mat-list>
       <div class="flex flex-row gap-4 m-2 justify-between">
         <button mat-flat-button (click)="resetFilter()">Reset</button>
         <button mat-flat-button (click)="applyFilter()">Apply</button>
@@ -52,6 +40,10 @@ import { IFilterParams, IDoesFilterPassParams } from 'ag-grid-community';
         max-height: 240px;
         overflow-y: auto;
         border: 1px solid #e0e0e0;
+      }
+
+      .selected-option {
+        background-color: #ffe6d7;
       }
     `,
   ],
