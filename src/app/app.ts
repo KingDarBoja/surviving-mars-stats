@@ -5,6 +5,7 @@ import { NgtCameraParameters, NgtVector3 } from 'angular-three';
 
 import { MarsScene } from './components/mars-scene/mars-scene.component';
 import { LandingLocationTableComponent } from './components/landing-location/landing-location-table.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
 
 /**
  * In order to render your scene graph properly, Angular Three needs to wait
@@ -13,16 +14,24 @@ import { LandingLocationTableComponent } from './components/landing-location/lan
  * so `NgtCanvas` can render the content when it is ready.
  */
 @Component({
-  imports: [RouterModule, NgtCanvas, MarsScene, LandingLocationTableComponent],
+  imports: [
+    RouterModule,
+    NgtCanvas,
+    NavigationComponent,
+    MarsScene,
+    LandingLocationTableComponent,
+  ],
   standalone: true,
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'app-root',
   styleUrl: './app.scss',
   template: `
+    <sms-navigation-bar />
+
     <div class="container mx-auto py-4">
-      <div class="px-2 border border-solid border-orange-200">
+      <div class="p-4 mx-4 sms-border">
         <!-- <router-outlet></router-outlet> -->
-        <h1 class="font-bold text-center pb-4">Surviving Mars Stats</h1>
+        <!-- <h1 class="font-bold text-center pb-4">Surviving Mars Stats</h1> -->
 
         <section class="flex flex-col gap-8">
           <!-- <div id="canvas-container">

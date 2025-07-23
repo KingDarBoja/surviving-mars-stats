@@ -108,8 +108,8 @@ export class UiTableComponent<TData = any> {
         fontSize: 12,
         browserColorScheme: 'light',
         headerFontWeight: 500,
-        headerTextColor: '#FFFFFF',
-        headerBackgroundColor: '#bd5417',
+        // headerTextColor: '#FFFFFF',
+        // headerBackgroundColor: '#bd5417',
       }),
     defaultColDef: {
       headerClass: 'ag-custom-header',

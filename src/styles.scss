@@ -1,16 +1,19 @@
+/** -------- ANGULAR MATERIAL -------- **/
+
 // Include theming for Angular Material with `mat.theme()`.
 // This Sass mixin will define CSS variables that are used for styling Angular Material
 // components according to the Material 3 design spec.
 // Learn more about theming and how to use it for your application's
 // custom components at https://material.angular.dev/guide/theming
 @use "@angular/material" as mat;
+@use "./mat-theme-colors" as theme;
 
 html {
   @include mat.theme(
     (
       color: (
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette
+        primary: theme.$primary-palette,
+        tertiary: theme.$tertiary-palette
       ),
       typography: Roboto,
       density: 0
@@ -28,7 +31,31 @@ html {
   background-color: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
+
+  @include mat.toolbar-overrides(
+    (
+      container-background-color: var(--mat-sys-primary),
+      container-text-color: var(--mat-sys-surface)
+    )
+  );
 }
+
+html.dark-mode {
+  color-scheme: dark;
+
+  @include mat.theme(
+    (
+      color: (
+        primary: theme.$primary-palette,
+        tertiary: theme.$tertiary-palette
+      ),
+      typography: Roboto,
+      density: 0
+    )
+  );
+}
+
+/** -------- TAILWINDCSS -------- **/
 
 /* You can add global styles to this file, and also import other style files */
 @tailwind base;
@@ -36,12 +63,20 @@ html {
 @tailwind utilities;
 
 /* -------------- Start custom styles for header and cell for ag-grid table -------------- */
+
+.ag-header-cell, .ag-header-group-cell {
+  background-color: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+}
+
 .ag-custom-header {
   text-align: center;
 }
 
 .ag-custom-cell {
   text-align: center;
+
+  color: var(--mat-sys-on-surface);
 }
 
 .resource-icon {
@@ -62,10 +97,10 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 
-  --sb-track-color: #ffc8a8;
-  --sb-thumb-color: #bd5417;
-  --sb-thumb-hover-color: #A2420B;
-  --sb-size: 10px;
+  --sb-track-color: var(--mat-sys-inverse-primary);
+  --sb-thumb-color: var(--mat-sys-primary);
+  --sb-thumb-hover-color: var(--mat-sys-on-primary-container);
+  --sb-size: 8px;
 }
 
 /** -------- Scrollbar -------- **/
@@ -84,7 +119,7 @@ body {
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: var(--sb-thumb-color);
-  border-radius: 4px;
+  // border-radius: 4px;
 
   &:hover {
     background: var(--sb-thumb-hover-color);
@@ -99,11 +134,15 @@ body {
 
 /** ---------- GLOBAL ----------- **/
 .sms-border {
-  @apply border border-solid border-orange-200;
+  @apply border border-solid;
+
+  border-color: var(--mat-sys-outline);
 }
 
 .sms-border-top {
-  @apply border-t border-solid border-orange-200;
+  @apply border-t border-solid;
+
+  border-color: var(--mat-sys-outline);
 
   border-left-width: 0;
   border-right-width: 0;
@@ -111,8 +150,15 @@ body {
 }
 
 .sms-image {
-  @apply object-scale-down max-w-full rounded-md m-auto border-2 border-solid border-orange-500;
+  @apply object-scale-down max-w-full rounded-md m-auto border-2 border-solid;
+
+  border-color: var(--mat-sys-outline);
 
   min-width: 64px;
   max-height: 160px;
+}
+
+.sms-header {
+  background-color: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
 }

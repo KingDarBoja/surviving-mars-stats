@@ -99,7 +99,7 @@ type LandingLocationColDef =
       @let selLoc = selectedLocation();
 
       <div class="col-span-5 md:col-span-2 sms-border">
-        <h3 class="m-0 p-2 text-center text-orange-800 bg-orange-200">Map Name</h3>
+        <h3 class="m-0 p-2 text-center sms-header">Map Name</h3>
         <div class="flex flex-col gap-1 items-center justify-center p-4">
           <!-- Image goes here -->
           <div class="landing-map">
@@ -161,7 +161,7 @@ type LandingLocationColDef =
       </div>
 
       <div class="col-span-5 md:col-span-3 sms-border">
-        <h3 class="m-0 p-2 text-center text-orange-800 bg-orange-200">Breakthroughs</h3>
+        <h3 class="m-0 p-2 text-center sms-header">Breakthroughs</h3>
 
         <div class="bt-list flex flex-col py-0">
           @if (selLoc) {
