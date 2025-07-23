@@ -7,8 +7,8 @@ import {
 } from '@angular/core';
 import { beforeRender, extend, NgtArgs, NgtVector3 } from 'angular-three';
 
-import atmosphereFragmentShader from '../assets/shaders/atmosphere/atmosphereFragment.glsl';
-import atmosphereVertexShader from '../assets/shaders/atmosphere/atmosphereVertex.glsl';
+import atmosphereFragmentShader from '../../assets/shaders/atmosphere/atmosphereFragment.glsl';
+import atmosphereVertexShader from '../../assets/shaders/atmosphere/atmosphereVertex.glsl';
 import {
   AdditiveBlending,
   BackSide,
@@ -67,7 +67,7 @@ export class MarsAtmosphereMeshComponent {
 
   /**
    * Perform all animation related to our sphere here.
-   * 
+   *
    * - Slighty scale the atmosphere mesh.
    */
   private animate() {

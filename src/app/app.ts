@@ -3,8 +3,8 @@ import { RouterModule } from '@angular/router';
 import { NgtCanvas } from 'angular-three/dom';
 import { NgtCameraParameters, NgtVector3 } from 'angular-three';
 
-import { MarsScene } from './mars-scene/mars-scene.component';
-import { LandingLocationTableComponent } from './landing-location/landing-location-table.component';
+import { MarsScene } from './components/mars-scene/mars-scene.component';
+import { LandingLocationTableComponent } from './components/landing-location/landing-location-table.component';
 
 /**
  * In order to render your scene graph properly, Angular Three needs to wait

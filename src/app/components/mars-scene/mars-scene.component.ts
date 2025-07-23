@@ -22,7 +22,7 @@ import {
 import { MarsMeshComponent } from './mars-mesh.component';
 import { MarsAtmosphereMeshComponent } from './mars-atmosphere-mesh.component';
 
-import phobosMoon from '../assets/glb/NASA_Phobos.glb' with { loader: 'file' };
+import phobosMoon from '../../assets/glb/NASA_Phobos.glb' with { loader: 'file' };
 
 extend({
   Color,

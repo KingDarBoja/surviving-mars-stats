@@ -24,8 +24,8 @@ import {
   SphereGeometry,
 } from 'three';
 
-import marsFragmentShader from '../assets/shaders/mars/marsFragment.glsl';
-import marsVertexShader from '../assets/shaders/mars/marsVertex.glsl';
+import marsFragmentShader from '../../assets/shaders/mars/marsFragment.glsl';
+import marsVertexShader from '../../assets/shaders/mars/marsVertex.glsl';
 
 extend({ Mesh, SphereGeometry, MeshStandardMaterial, ShaderMaterial });
 

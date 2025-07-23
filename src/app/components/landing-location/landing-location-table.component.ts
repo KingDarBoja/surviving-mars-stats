@@ -7,23 +7,23 @@ import {
   UiTableComponent,
   ColDef,
   ColGroupDef,
-} from '../ui-table/ui-table.component';
+} from '../../shared/ui-table/ui-table.component';
 import { GameIcons, ResourceIconRenderer } from './icons-renderer.component';
 import {
   CustomArrayFilterComponent,
   CustomSetFilterComponent,
-} from '../ui-table';
+} from '../../shared/ui-table';
 import {
   BreakthroughIcon,
   type BreakthroughLocaleSchema,
   type BreakthroughName,
   type LandingLocationSchema,
-} from '../schemas';
-import { LocaleService } from '../services/locale.service';
+} from '../../shared/schemas';
+import { LocaleService } from '../../shared/services';
 import {
   SurvivingMarsMapNameI18N,
   type SurvivingMarsMapId,
-} from '../schemas/map-name-schemas';
+} from '../../shared/schemas/map-name-schemas';
 
 type LandingLocationSchemaColumn = {
   /** */
@@ -99,9 +99,8 @@ type LandingLocationColDef =
       @let selLoc = selectedLocation();
 
       <div class="col-span-5 md:col-span-2 sms-border">
-        <h3 class="m-0 p-2 text-center bg-orange-200">Map Name</h3>
+        <h3 class="m-0 p-2 text-center text-orange-800 bg-orange-200">Map Name</h3>
         <div class="flex flex-col gap-1 items-center justify-center p-4">
-
           <!-- Image goes here -->
           <div class="landing-map">
             @if (selLoc) {
@@ -162,7 +161,7 @@ type LandingLocationColDef =
       </div>
 
       <div class="col-span-5 md:col-span-3 sms-border">
-        <h3 class="m-0 p-2 text-center bg-orange-200">Breakthroughs</h3>
+        <h3 class="m-0 p-2 text-center text-orange-800 bg-orange-200">Breakthroughs</h3>
 
         <div class="bt-list flex flex-col py-0">
           @if (selLoc) {
@@ -174,8 +173,17 @@ type LandingLocationColDef =
                   [src]="'icons/research/' + breakthroughIcon[btl.id] + '.png'"
                 />
                 <div class="flex flex-col gap-1">
-                  <h4 class="m-0">{{ btl.name_loc.en }}</h4>
-                  <p class="m-0 text-justify text-sm">{{ btl.desc_loc.en }}</p>
+                  <h4
+                    class="m-0"
+                    [class]="{
+                      'text-orange-500': idx < 4,
+                    }"
+                  >
+                    {{ btl.name_loc.en }}
+                  </h4>
+                  <p class="m-0 text-justify text-sm text">
+                    {{ btl.desc_loc.en }}
+                  </p>
                 </div>
               </div>
             }
