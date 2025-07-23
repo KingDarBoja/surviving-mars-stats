@@ -39,12 +39,12 @@ import { IFilterParams, IDoesFilterPassParams } from 'ag-grid-community';
       .custom-array-filter-container {
         max-height: 240px;
         overflow-y: auto;
-        border: 1px solid #e0e0e0;
+        // border: 1px solid #e0e0e0;
       }
 
-      .selected-option {
-        background-color: #ffe6d7;
-      }
+      // .selected-option {
+      //   background-color: #ffe6d7;
+      // }
     `,
   ],
 })

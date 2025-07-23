@@ -1,6 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, tap } from 'rxjs';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { BehaviorSubject, map, of, switchMap, tap } from 'rxjs';
 import Papa from 'papaparse';
 
 import {
@@ -15,15 +18,17 @@ import {
 } from '../../shared/ui-table';
 import {
   BreakthroughIcon,
+  SurvivingMarsBreakthroughVersionValue,
   type BreakthroughLocaleSchema,
   type BreakthroughName,
   type LandingLocationSchema,
 } from '../../shared/schemas';
 import { LocaleService } from '../../shared/services';
 import {
+  SurvivingMarsBreakthroughVersions,
   SurvivingMarsMapNameI18N,
   type SurvivingMarsMapId,
-} from '../../shared/schemas/map-name-schemas';
+} from '../../shared/schemas';
 
 type LandingLocationSchemaColumn = {
   /** */
@@ -93,7 +98,13 @@ type LandingLocationColDef =
 @Component({
   standalone: true,
   selector: 'sms-landing-location-table',
-  imports: [UiTableComponent],
+  imports: [
+    MatFormFieldModule,
+    MatSelectModule,
+    FormsModule,
+    ReactiveFormsModule,
+    UiTableComponent,
+  ],
   template: `
     <section class="grid gap-4 grid-cols-5 pb-8">
       @let selLoc = selectedLocation();
@@ -194,6 +205,15 @@ type LandingLocationColDef =
       </div>
     </section>
 
+    <mat-form-field>
+      <mat-label>Select game version</mat-label>
+      <mat-select (selectionChange)="selectedGV($event)">
+        @for (gameVersion of gameVersions; track gameVersion.id) {
+          <mat-option [value]="gameVersion">{{ gameVersion.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
     <sms-ui-table
       gridId="landing-location-table"
       [rowData]="rowData()"
@@ -217,10 +237,11 @@ type LandingLocationColDef =
   ],
 })
 export class LandingLocationTableComponent {
-  readonly breakthroughIcon = BreakthroughIcon;
-
   private readonly http = inject(HttpClient);
   private readonly localeService = inject(LocaleService);
+
+  readonly breakthroughIcon = BreakthroughIcon;
+  readonly gameVersions = Object.values(SurvivingMarsBreakthroughVersions);
 
   rowData = signal<LandingLocationSchemaColumn[]>([]);
   readonly colDefs: LandingLocationColDef[] = [
@@ -373,10 +394,25 @@ export class LandingLocationTableComponent {
   ];
 
   selectedLocation = signal<LandingLocationSchemaColumn>(undefined);
+  private readonly _selectedGameVersion$ =
+    new BehaviorSubject<SurvivingMarsBreakthroughVersionValue>(undefined);
 
-  private readonly _mapLocation$ = this.http
-    .get('./data/MapData-Breakthroughs_GP-BB_20.csv', { responseType: 'text' })
-    .pipe(map((csvData) => this.parseCSV<LandingLocationSchema>(csvData)));
+  private readonly _mapLocation$ = this._selectedGameVersion$
+    .asObservable()
+    .pipe(
+      switchMap((gameVersion) => {
+        if (gameVersion) {
+          return this.http
+            .get(gameVersion.path, {
+              responseType: 'text',
+            })
+            .pipe(
+              map((csvData) => this.parseCSV<LandingLocationSchema>(csvData)),
+            );
+        }
+        return of([] as LandingLocationSchema[]);
+      }),
+    );
 
   private readonly parseCSV = <T>(csvData: string): T[] => {
     const csv = Papa.parse<T>(csvData, {
@@ -399,6 +435,12 @@ export class LandingLocationTableComponent {
 
   locationSelected(data: LandingLocationSchemaColumn | undefined) {
     this.selectedLocation.set(data);
+  }
+
+  selectedGV({
+    value,
+  }: MatSelectChange<SurvivingMarsBreakthroughVersionValue>) {
+    this._selectedGameVersion$.next(value);
   }
 
   private formatRows(jsonRows: LandingLocationSchema[]) {

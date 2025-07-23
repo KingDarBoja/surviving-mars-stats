@@ -1,4 +1,28 @@
-import { LocaleSchema } from "./locale-schemas";
+import { LocaleSchema } from './locale-schemas';
+
+export type SurvivingMarsBreakthroughVersionId = 'BASE' | 'GREEN_PLANET';
+
+export type SurvivingMarsBreakthroughVersionValue = {
+  id: SurvivingMarsBreakthroughVersionId;
+  label: string;
+  path: string;
+};
+
+export const SurvivingMarsBreakthroughVersions: Record<
+  SurvivingMarsBreakthroughVersionId,
+  SurvivingMarsBreakthroughVersionValue
+> = {
+  BASE: {
+    id: 'BASE',
+    label: 'Base game (No DLCs)',
+    path: './data/MapData-Breakthroughs.csv',
+  },
+  GREEN_PLANET: {
+    id: 'GREEN_PLANET',
+    label: 'Green Planet DLC',
+    path: './data/MapData-Breakthroughs_GP.csv',
+  },
+};
 
 /** The locale breakthrough desc csv column. */
 export type BreakthroughSourceLocaleSchema = {
@@ -16,7 +40,7 @@ export const BreakthroughMapping = {
   'Autonomous Hubs': 'AutonomousHubs',
   'Capture Asteroid': 'CaptureAsteroid',
   'Cargobay of holding': 'CargobayOfHolding',
-  'Cloning': 'Cloning',
+  Cloning: 'Cloning',
   'Construction Nanites': 'ConstructionNanites',
   'Core Metals': 'CoreMetals',
   'Core Rare Metals': 'CoreRareMetals',
@@ -66,7 +90,7 @@ export const BreakthroughMapping = {
   'Soylent Green': 'SoylentGreen',
   'Space Rehabilitation': 'SpaceRehabilitation',
   'Superconducting Computing': 'SuperconductingComputing',
-  'Superfungus': 'Superfungus',
+  Superfungus: 'Superfungus',
   'Superior Cables': 'SuperiorCables',
   'Superior Pipes': 'SuperiorPipes',
   'Sustained Workload': 'SustainedWorkload',
