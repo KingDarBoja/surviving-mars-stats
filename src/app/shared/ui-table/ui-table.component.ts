@@ -55,8 +55,8 @@ export class UiTableComponent<TData = any> {
 
   readonly initialState = input<GridState | undefined>();
 
-  readonly rowSelection = input<RowSelectionOptions | "single" | "multiple">({
-    mode: "singleRow",
+  readonly rowSelection = input<RowSelectionOptions | 'single' | 'multiple'>({
+    mode: 'singleRow',
     // checkboxes: false,
     enableClickSelection: true,
   });
@@ -69,12 +69,11 @@ export class UiTableComponent<TData = any> {
 
   private _gridApi!: GridApi;
 
-
-  /** 
+  /**
    * Emit the row selected data.
-   * 
+   *
    * When `isSelected()` is true, the row was selected, otherwise deselected.
-   * 
+   *
    * https://www.ag-grid.com/angular-data-grid/row-selection-api-reference/#reference-selection-rowSelected
    */
   protected rowSelectedEvent({ node, data }: RowSelectedEvent<TData>) {
@@ -101,16 +100,30 @@ export class UiTableComponent<TData = any> {
     /** Controls the theme. Quarts is the most similar to material. */
     theme: themeMaterial
       .withPart(iconSetMaterial)
-      .withPart(colorSchemeLight)
+      // .withPart(colorSchemeLight)
       // Material icons are designed to look best at 18, 24, 36 or 48px
-      .withParams({
-        iconSize: 18,
-        fontSize: 12,
-        browserColorScheme: 'light',
-        headerFontWeight: 500,
-        // headerTextColor: '#FFFFFF',
-        // headerBackgroundColor: '#bd5417',
-      }),
+      .withParams(
+        {
+          iconSize: 18,
+          fontSize: 12,
+          browserColorScheme: 'light',
+          headerFontWeight: 500,
+          // headerTextColor: '#FFFFFF',
+          // headerBackgroundColor: '#bd5417',
+        },
+        'light-mode',
+      )
+      .withParams(
+        {
+          iconSize: 18,
+          fontSize: 12,
+          browserColorScheme: 'dark',
+          headerFontWeight: 500,
+          // headerTextColor: '#FFFFFF',
+          // headerBackgroundColor: '#bd5417',
+        },
+        'dark-mode',
+      ),
     defaultColDef: {
       headerClass: 'ag-custom-header',
       cellClass: 'ag-custom-cell',
@@ -128,7 +141,7 @@ export class UiTableComponent<TData = any> {
       },
     },
     pagination: true,
-    suppressCellFocus: false, 
+    suppressCellFocus: false,
   };
 
   constructor() {

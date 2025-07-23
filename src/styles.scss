@@ -64,7 +64,8 @@ html.dark-mode {
 
 /* -------------- Start custom styles for header and cell for ag-grid table -------------- */
 
-.ag-header-cell, .ag-header-group-cell {
+.ag-header-cell,
+.ag-header-group-cell {
   background-color: var(--mat-sys-primary);
   color: var(--mat-sys-on-primary);
 }
@@ -73,10 +74,13 @@ html.dark-mode {
   text-align: center;
 }
 
+// .ag-cell {
+//   color: var(--mat-sys-on-surface);
+//   background-color: var(--mat-sys-on-primary);
+// }
+
 .ag-custom-cell {
   text-align: center;
-
-  color: var(--mat-sys-on-surface);
 }
 
 .resource-icon {
@@ -101,6 +105,12 @@ body {
   --sb-thumb-color: var(--mat-sys-primary);
   --sb-thumb-hover-color: var(--mat-sys-on-primary-container);
   --sb-size: 8px;
+
+  /* -------- Customize ag-grid variables -------- */
+  --ag-background-color: var(--mat-sys-on-primary);
+  --ag-selected-row-background-color: var(--mat-sys-primary-container);
+  --ag-foreground-color: var(--mat-sys-on-surface);
+  --ag-border-color: var(--mat-sys-secondary);
 }
 
 /** -------- Scrollbar -------- **/

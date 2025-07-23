@@ -10,6 +10,9 @@
       <mat-icon>info</mat-icon>
       <span class="">FAQ</span>
     </button>
+    <button matButton class="" aria-label="theme" (click)="toggleTheme()">
+      <mat-icon>{{ selectedTheme() === 'light' ? 'dark_mode' : 'light_mode' }}</mat-icon>
+    </button>
   </div>
 
 </mat-toolbar>
