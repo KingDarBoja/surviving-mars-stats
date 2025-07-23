@@ -92,7 +92,7 @@ type LandingLocationColDef =
 
 @Component({
   standalone: true,
-  selector: 'sms-landing-location',
+  selector: 'sms-landing-location-table',
   imports: [UiTableComponent],
   template: `
     <section class="grid gap-4 grid-cols-5 pb-8">

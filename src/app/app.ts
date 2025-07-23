@@ -1,10 +1,6 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NgtCanvas } from 'angular-three/dom';
-import { NgtCameraParameters, NgtVector3 } from 'angular-three';
 
-import { MarsScene } from './components/mars-scene/mars-scene.component';
-import { LandingLocationTableComponent } from './components/landing-location/landing-location-table.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 
 /**
@@ -14,13 +10,7 @@ import { NavigationComponent } from './components/navigation/navigation.componen
  * so `NgtCanvas` can render the content when it is ready.
  */
 @Component({
-  imports: [
-    RouterModule,
-    NgtCanvas,
-    NavigationComponent,
-    MarsScene,
-    LandingLocationTableComponent,
-  ],
+  imports: [RouterModule, NavigationComponent],
   standalone: true,
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'app-root',
@@ -30,23 +20,7 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 
     <div class="container mx-auto py-4">
       <div class="p-4 mx-4 sms-border">
-        <!-- <router-outlet></router-outlet> -->
-        <!-- <h1 class="font-bold text-center pb-4">Surviving Mars Stats</h1> -->
-
-        <section class="flex flex-col gap-8">
-          <!-- <div id="canvas-container">
-            <ngt-canvas
-              [camera]="canvasCamera"
-              [lookAt]="canvasLookAt"
-              (created)="$event.gl.setClearColor('black')"
-              shadows
-            >
-              <sms-mars-scene *canvasContent />
-            </ngt-canvas>
-          </div> -->
-
-          <sms-landing-location />
-        </section>
+        <router-outlet></router-outlet>
       </div>
     </div>
   `,
@@ -54,9 +28,4 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 })
 export class App {
   protected title = 'surviving-mars-stats';
-
-  protected canvasCamera: NgtCameraParameters = {
-    position: [0, 0, 20],
-  };
-  protected canvasLookAt: NgtVector3 = [0, 0, 0];
 }
