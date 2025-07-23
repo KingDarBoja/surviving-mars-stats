@@ -74,11 +74,6 @@ html.dark-mode {
   text-align: center;
 }
 
-// .ag-cell {
-//   color: var(--mat-sys-on-surface);
-//   background-color: var(--mat-sys-on-primary);
-// }
-
 .ag-custom-cell {
   text-align: center;
 }
@@ -107,12 +102,13 @@ body {
   --sb-size: 8px;
 
   /* -------- Customize ag-grid variables -------- */
-  --ag-background-color: var(--mat-sys-on-primary);
+  --ag-background-color: var(--mat-sys-surface);
   --ag-selected-row-background-color: var(--mat-sys-primary-container);
   --ag-foreground-color: var(--mat-sys-on-surface);
-  --ag-border-color: var(--mat-sys-secondary);
+  
+  --ag-border-color: var(--mat-sys-secondary-container);
+  --ag-header-column-resize-handle-color: var(--mat-sys-surface);
 }
-
 /** -------- Scrollbar -------- **/
 
 /* width */
@@ -171,4 +167,11 @@ body {
 .sms-header {
   background-color: var(--mat-sys-primary);
   color: var(--mat-sys-on-primary);
+}
+
+/* Highlight the planetary anomalies research */
+.sms-bt-pa {
+  color: var(--mat-sys-secondary);
+
+  text-decoration: underline;
 }

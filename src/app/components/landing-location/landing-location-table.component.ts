@@ -176,7 +176,7 @@ type LandingLocationColDef =
                   <h4
                     class="m-0"
                     [class]="{
-                      'text-orange-500': idx < 4,
+                      'sms-bt-pa': idx < 4,
                     }"
                   >
                     {{ btl.name_loc.en }}
@@ -187,6 +187,8 @@ type LandingLocationColDef =
                 </div>
               </div>
             }
+          } @else {
+            <p class="text-center">No location selected.</p>
           }
         </div>
       </div>
@@ -236,7 +238,7 @@ export class LandingLocationTableComponent {
       filter: { component: CustomSetFilterComponent },
     },
     {
-      minWidth: 160,
+      minWidth: 200,
       field: 'breakthroughs_view',
       headerName: 'Breakthroughs',
       filter: { component: CustomArrayFilterComponent },
