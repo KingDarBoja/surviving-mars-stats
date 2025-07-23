@@ -45,6 +45,10 @@ export class LocaleService {
     BreakthroughLocaleSchema
   >;
 
+  getAllBreakthroughLocales() {
+    return this._breakthroughLocales;
+  }
+
   getBreakthroughLocale(name: BreakthroughName) {
     /** Just in case we pass it without trimming. */
     const cleanName = name.trim() as BreakthroughName;

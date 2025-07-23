@@ -18,7 +18,9 @@ import {
 } from '../../shared/ui-table';
 import {
   BreakthroughIcon,
+  NamedLocation,
   SurvivingMarsBreakthroughVersionValue,
+  SurvivingMarsNamedLocationMapping,
   type BreakthroughLocaleSchema,
   type BreakthroughName,
   type LandingLocationSchema,
@@ -70,7 +72,7 @@ type LandingLocationSchemaColumn = {
    */
   map_name_view: string;
   /** These can be empty or a fixed enum string. */
-  named_location: string | null;
+  named_location: NamedLocation | null;
   /* --------- ALL BREAKTHROUGHS --------- */
   breakthroughs: BreakthroughLocaleSchema[];
   breakthroughs_view: string[];
@@ -225,7 +227,7 @@ type LandingLocationColDef =
   styles: [
     `
       .bt-list {
-        max-height: 380px;
+        height: 380px;
         overflow-y: auto;
       }
 
@@ -257,12 +259,30 @@ export class LandingLocationTableComponent {
       field: 'named_location',
       headerName: 'Named Location',
       filter: { component: CustomSetFilterComponent },
+      filterParams: {
+        /** @TODO provide translation object. */
+        options: Object.keys(SurvivingMarsNamedLocationMapping),
+      }
+    },
+    {
+      minWidth: 120,
+      field: 'map_name_view',
+      headerName: 'Map Name',
+      filter: { component: CustomSetFilterComponent },
+      filterParams: {
+        options: Object.values(SurvivingMarsMapNameI18N),
+      },
     },
     {
       minWidth: 200,
       field: 'breakthroughs_view',
       headerName: 'Breakthroughs',
       filter: { component: CustomArrayFilterComponent },
+      filterParams: {
+        options: Object.values(
+          this.localeService.getAllBreakthroughLocales(),
+        ).map((x) => x.name_loc.en),
+      },
       valueFormatter: (params) => (params.value as string[]).join(', '),
     },
     // {
@@ -480,7 +500,7 @@ export class LandingLocationTableComponent {
         cold_waves: jr['Cold Waves'],
         map_name: jr['Map Name'],
         map_name_view: SurvivingMarsMapNameI18N[jr['Map Name']],
-        named_location: jr['Named Location'],
+        named_location: jr['Named Location'] ? jr['Named Location'].trim() as NamedLocation : null,
         /* Additional fields. */
         breakthroughs: btLocales,
         breakthroughs_view: btLocales.map((x) => x.name_loc.en),

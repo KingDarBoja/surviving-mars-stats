@@ -37,9 +37,22 @@ export class CustomSetFilterComponent implements IFilterAngularComp {
 
   agInit(params: IFilterParams): void {
     this.params = params;
-    // Extract unique values from the column data
-    // In a real application, you'd likely fetch this from your data source
-    this.extractUniqueValues(params);
+    // You can pass predefined options via filterParams in colDef
+    if (params.colDef?.filterParams && params.colDef.filterParams.options) {
+      this.uniqueValues = new Set(params.colDef.filterParams.options);
+      this.sortedUniqueValues = Array.from(this.uniqueValues).sort((a, b) => {
+        // Basic string comparison for ascending order
+        return a.localeCompare(b);
+      });
+    } else {
+      // Fallback: Infer options from grid data if not provided (more complex for large datasets)
+      // For a more robust solution, always provide predefined options via filterParams.
+      console.warn(
+        'Predefined options not provided. Consider passing them via filterParams.',
+      );
+      // Example of inferring (only for small datasets, can be slow):
+      this.extractUniqueValues(params);
+    }
   }
 
   isFilterActive(): boolean {
@@ -53,7 +66,7 @@ export class CustomSetFilterComponent implements IFilterAngularComp {
     // Get the value of the column for the current row
     // const field = this.params.colDef.field;
     // const cellValue = params.data[field];
-    const cellValue = this.params.getValue(params.node, this.params.colDef)
+    const cellValue = this.params.getValue(params.node, this.params.colDef);
     return this.selectedValues.has(String(cellValue));
   }
 

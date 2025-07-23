@@ -50,8 +50,8 @@ import { IFilterParams, IDoesFilterPassParams } from 'ag-grid-community';
 })
 export class CustomArrayFilterComponent implements IFilterAngularComp {
   private params!: IFilterParams;
-  public predefinedOptions: string[] = []; // This will hold your unique tags
-  public selectedOptions: string[] = [];
+  predefinedOptions: string[] = []; // This will hold your unique tags
+  selectedOptions: string[] = [];
 
   agInit(params: IFilterParams): void {
     this.params = params;
