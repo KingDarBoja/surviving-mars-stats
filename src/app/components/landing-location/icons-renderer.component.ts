@@ -33,19 +33,27 @@ const GameAssetIcons: Record<GameIcons, { desc: string; url: string }> = {
   },
   [GameIcons.RES_WATER]: {
     desc: 'Water',
-    url: './icons/resources/res_water.png',
+    // url: './icons/resources/res_water.png',
+    // url: './icons/resources/deposit_water.png',
+    url: './icons/resources/deposit_decal_water.png',
   },
   [GameIcons.RES_CONCRETE]: {
     desc: 'Concrete',
-    url: './icons/resources/res_concrete.png',
+    // url: './icons/resources/res_concrete.png',
+    // url: './icons/resources/deposit_concrete.png',
+    url: './icons/resources/deposit_decal_concrete.png',
   },
   [GameIcons.RES_METAL]: {
     desc: 'Metals',
-    url: './icons/resources/res_metal.png',
+    // url: './icons/resources/res_metal.png',
+    // url: './icons/resources/deposit_subsurface_metals.png',
+    url: './icons/resources/deposit_decal_metals.png',
   },
   [GameIcons.RES_RARE_METAL]: {
     desc: 'Rare Metals',
-    url: './icons/resources/res_precious_metals.png',
+    // url: './icons/resources/res_precious_metals.png',
+    // url: './icons/resources/deposit_rare_metals.png',
+    url: './icons/resources/deposit_decal_rare_metals.png',
   },
 };
 
@@ -60,9 +68,8 @@ const GameAssetIcons: Record<GameIcons, { desc: string; url: string }> = {
           [alt]="icon().desc"
           [src]="icon().url"
           [height]="24"
-          :class="logo"
         />
-        <span>{{ value() }}</span>
+        <span class="ml-2 font-medium">{{ value() }}</span>
       }
     </div>
   `,
