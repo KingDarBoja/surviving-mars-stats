@@ -33,6 +33,7 @@
       },
       "configurations": {
         "production": {
+          "baseHref": "/surviving-mars-stats/",
           "budgets": [
             {
               "type": "initial",
