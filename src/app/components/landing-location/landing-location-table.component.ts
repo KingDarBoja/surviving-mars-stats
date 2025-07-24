@@ -22,6 +22,7 @@ import {
   NamedLocation,
   SurvivingMarsBreakthroughVersionValue,
   SurvivingMarsNamedLocationMapping,
+  type Topography,
   type BreakthroughLocaleSchema,
   type BreakthroughName,
   type LandingLocationSchema,
@@ -45,7 +46,7 @@ type LandingLocationSchemaColumn = {
   /** */
   longitude: 'W' | 'E';
   /** */
-  topography: 'Relatively Flat' | 'Steep' | 'Rough' | 'Mountanious';
+  topography: Topography;
   /** */
   difficulty: number;
   /** */

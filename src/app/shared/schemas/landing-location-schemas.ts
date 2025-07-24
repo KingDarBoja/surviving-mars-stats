@@ -50,7 +50,7 @@ export const LandingLocationTopography = {
   FLAT: 'Relatively Flat',
   STEEP: 'Steep',
   ROUGH: 'Rough',
-  MOUNTANIOUS: 'Mountanious',
+  MOUNTAINOUS: 'Mountainous',
 } as const;
 
 export type Topography = typeof LandingLocationTopography[keyof typeof LandingLocationTopography];
