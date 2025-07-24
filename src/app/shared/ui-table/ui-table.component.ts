@@ -124,6 +124,9 @@ export class UiTableComponent<TData = any> {
         },
         'dark-mode',
       ),
+    tooltipShowMode: 'whenTruncated',
+    tooltipShowDelay: 500,
+    tooltipHideDelay: 5000,
     defaultColDef: {
       headerClass: 'ag-custom-header',
       cellClass: 'ag-custom-cell',

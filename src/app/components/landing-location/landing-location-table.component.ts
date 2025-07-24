@@ -265,9 +265,10 @@ export class LandingLocationTableComponent {
       }
     },
     {
-      minWidth: 120,
+      minWidth: 140,
       field: 'map_name_view',
       headerName: 'Map Name',
+      tooltipField: "map_name_view",
       filter: { component: CustomSetFilterComponent },
       filterParams: {
         options: Object.values(SurvivingMarsMapNameI18N),

@@ -11,6 +11,7 @@ import {
   RowSelectionModule,
   RowStyleModule,
   TextFilterModule,
+  TooltipModule,
 } from 'ag-grid-community';
 
 export const registerAgGridModules = () => {
@@ -26,5 +27,6 @@ export const registerAgGridModules = () => {
     RowSelectionModule,
     RowStyleModule,
     TextFilterModule,
+    TooltipModule,
   ]);
 };
