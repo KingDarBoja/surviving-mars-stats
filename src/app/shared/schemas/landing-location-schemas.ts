@@ -8,7 +8,7 @@ export type LandingLocationSchema = {
   Latitude: 'N' | 'S';
   'Longitude °': number;
   Longitude: 'W' | 'E';
-  Topography: 'Relatively Flat' | 'Steep' | 'Rough' | 'Mountanious';
+  Topography: Topography;
   'Difficulty Challenge': number;
   Altitude: number;
   Temperature: number;
@@ -45,6 +45,15 @@ export type LandingLocationSchema = {
   'Breakthrough 19'?: BreakthroughName;
   'Breakthrough 20'?: BreakthroughName;
 };
+
+export enum LandingLocationTopography {
+  FLAT = 'Relatively Flat',
+  STEEP = 'Steep',
+  ROUGH = 'Rough',
+  MOUNTANIOUS = 'Mountanious',
+}
+
+export type Topography = typeof LandingLocationTopography[keyof typeof LandingLocationTopography];
 
 export type NamedLocation = keyof typeof SurvivingMarsNamedLocationMapping;
 

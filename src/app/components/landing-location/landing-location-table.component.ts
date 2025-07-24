@@ -18,6 +18,7 @@ import {
 } from '../../shared/ui-table';
 import {
   BreakthroughIcon,
+  LandingLocationTopography,
   NamedLocation,
   SurvivingMarsBreakthroughVersionValue,
   SurvivingMarsNamedLocationMapping,
@@ -294,6 +295,9 @@ export class LandingLocationTableComponent {
           field: 'topography',
           headerName: 'Topography',
           filter: { component: CustomSetFilterComponent },
+          filterParams: {
+            options: Object.values(LandingLocationTopography),
+          },
         },
         {
           columnGroupShow: 'open',
