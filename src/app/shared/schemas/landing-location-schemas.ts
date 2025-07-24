@@ -46,12 +46,12 @@ export type LandingLocationSchema = {
   'Breakthrough 20'?: BreakthroughName;
 };
 
-export enum LandingLocationTopography {
-  FLAT = 'Relatively Flat',
-  STEEP = 'Steep',
-  ROUGH = 'Rough',
-  MOUNTANIOUS = 'Mountanious',
-}
+export const LandingLocationTopography = {
+  FLAT: 'Relatively Flat',
+  STEEP: 'Steep',
+  ROUGH: 'Rough',
+  MOUNTANIOUS: 'Mountanious',
+} as const;
 
 export type Topography = typeof LandingLocationTopography[keyof typeof LandingLocationTopography];
 
