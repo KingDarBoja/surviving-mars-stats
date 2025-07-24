@@ -1,6 +1,10 @@
 import { LocaleSchema } from './locale-schemas';
 
-export type SurvivingMarsBreakthroughVersionId = 'BASE' | 'GREEN_PLANET';
+export type SurvivingMarsBreakthroughVersionId =
+  | 'BASE'
+  | 'GREEN_PLANET'
+  | 'BELOW_AND_BEYOND'
+  | 'GP_BB';
 
 export type SurvivingMarsBreakthroughVersionValue = {
   id: SurvivingMarsBreakthroughVersionId;
@@ -21,6 +25,16 @@ export const SurvivingMarsBreakthroughVersions: Record<
     id: 'GREEN_PLANET',
     label: 'Green Planet DLC',
     path: './data/MapData-Breakthroughs_GP.csv',
+  },
+  BELOW_AND_BEYOND: {
+    id: 'BELOW_AND_BEYOND',
+    label: 'Below and Beyond DLC',
+    path: './data/MapData-Breakthroughs_BB.csv',
+  },
+  GP_BB: {
+    id: 'GP_BB',
+    label: 'Green Planet + Below and Beyond DLCs',
+    path: './data/MapData-Breakthroughs_GP-BB.csv',
   },
 };
 

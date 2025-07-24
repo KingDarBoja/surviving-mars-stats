@@ -285,16 +285,6 @@ export class LandingLocationTableComponent {
       },
       valueFormatter: (params) => (params.value as string[]).join(', '),
     },
-    // {
-    //   headerName: 'Breakthroughs',
-    //   children: [
-    //     {
-    //       field: 'breakthroughs_group.breakthrough_1.name_loc.en',
-    //       headerName: '1',
-    //       filter: { component: CustomSetFilterComponent },
-    //     },
-    //   ],
-    // },
     {
       headerName: 'Geography',
       children: [
