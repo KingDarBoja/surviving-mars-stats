@@ -262,13 +262,13 @@ export class LandingLocationTableComponent {
       filterParams: {
         /** @TODO provide translation object. */
         options: Object.keys(SurvivingMarsNamedLocationMapping),
-      }
+      },
     },
     {
       minWidth: 140,
       field: 'map_name_view',
       headerName: 'Map Name',
-      tooltipField: "map_name_view",
+      tooltipField: 'map_name_view',
       filter: { component: CustomSetFilterComponent },
       filterParams: {
         options: Object.values(SurvivingMarsMapNameI18N),
@@ -323,6 +323,7 @@ export class LandingLocationTableComponent {
           field: 'sum_disasters',
           headerName: 'Total disasters',
           filter: 'agNumberColumnFilter',
+          resizable: false,
         },
         {
           columnGroupShow: 'open',
@@ -375,30 +376,47 @@ export class LandingLocationTableComponent {
           field: 'sum_resources',
           headerName: 'Total resources',
           filter: 'agNumberColumnFilter',
+          resizable: false,
         },
         {
           columnGroupShow: 'open',
           field: 'concrete',
           headerName: 'Concrete',
           filter: 'agNumberColumnFilter',
+          cellRenderer: ResourceIconRenderer,
+          context: {
+            iconName: GameIcons.RES_CONCRETE,
+          },
         },
         {
           columnGroupShow: 'open',
           field: 'water',
           headerName: 'Water',
           filter: 'agNumberColumnFilter',
+          cellRenderer: ResourceIconRenderer,
+          context: {
+            iconName: GameIcons.RES_WATER,
+          },
         },
         {
           columnGroupShow: 'open',
           field: 'metals',
           headerName: 'Metals',
           filter: 'agNumberColumnFilter',
+          cellRenderer: ResourceIconRenderer,
+          context: {
+            iconName: GameIcons.RES_METAL,
+          },
         },
         {
           columnGroupShow: 'open',
           field: 'rare_metals',
           headerName: 'Rare Metals',
           filter: 'agNumberColumnFilter',
+          cellRenderer: ResourceIconRenderer,
+          context: {
+            iconName: GameIcons.RES_RARE_METAL,
+          },
         },
       ],
     },
@@ -491,7 +509,9 @@ export class LandingLocationTableComponent {
         cold_waves: jr['Cold Waves'],
         map_name: jr['Map Name'],
         map_name_view: SurvivingMarsMapNameI18N[jr['Map Name']],
-        named_location: jr['Named Location'] ? jr['Named Location'].trim() as NamedLocation : null,
+        named_location: jr['Named Location']
+          ? (jr['Named Location'].trim() as NamedLocation)
+          : null,
         /* Additional fields. */
         breakthroughs: btLocales,
         breakthroughs_view: btLocales.map((x) => x.name_loc.en),
