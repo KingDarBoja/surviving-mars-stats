@@ -15,7 +15,9 @@ import { IFilterParams, IDoesFilterPassParams } from 'ag-grid-community';
       <mat-list class="custom-array-filter-container" cdkScrollable>
         @for (option of predefinedOptions; track option) {
           <!-- <div class="custom-filter-item"> -->
-          <mat-list-item [class.selected-option]="selectedOptions.includes(option)">
+          <mat-list-item
+            [class.selected-option]="selectedOptions.includes(option)"
+          >
             <mat-checkbox
               [id]="option"
               [value]="option"
@@ -91,12 +93,23 @@ export class CustomArrayFilterComponent implements IFilterAngularComp {
       return false; // Or true, depending on how you want to handle non-array values
     }
 
-    // Check if the row's array contains AT LEAST ONE of the selected filter options
-    return this.selectedOptions.some((selectedTag) =>
-      cellValue.some(
-        (item) => String(item).toLowerCase() === selectedTag.toLowerCase(),
-      ),
-    );
+    switch (this.params.colDef.filterParams.operation) {
+      case 'AND':
+        /* Check if the row's array contains EVERY of the selected filter options. */
+        return this.selectedOptions.every((selectedTag) =>
+          cellValue.some(
+            (item) => String(item).toLowerCase() === selectedTag.toLowerCase(),
+          ),
+        );
+
+      default:
+        /* Check if the row's array contains AT LEAST ONE of the selected filter options. */
+        return this.selectedOptions.some((selectedTag) =>
+          cellValue.some(
+            (item) => String(item).toLowerCase() === selectedTag.toLowerCase(),
+          ),
+        );
+    }
   }
 
   getModel(): any {

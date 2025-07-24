@@ -280,6 +280,7 @@ export class LandingLocationTableComponent {
       headerName: 'Breakthroughs',
       filter: { component: CustomArrayFilterComponent },
       filterParams: {
+        operation: 'AND',
         options: Object.values(
           this.localeService.getAllBreakthroughLocales(),
         ).map((x) => x.name_loc.en),
