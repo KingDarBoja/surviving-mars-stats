@@ -37,6 +37,8 @@ import {
 type LandingLocationSchemaColumn = {
   /** */
   coordinates: string;
+  /** Formatted as in-game. */
+  coordinates_view: string;
   /** */
   latitude_deg: number;
   /** */
@@ -139,39 +141,109 @@ type LandingLocationColDef =
         </div>
         <div class="flex flex-col gap-1 px-4">
           <div class="flex flex-col sm:flex-row sm:justify-between">
-            <h5 class="w-28 m-0">Location</h5>
-            <p class="m-0 sm:text-right text-sm">
-              {{ selLoc ? selLoc.coordinates : '---' }}
+            <h5 class="flex-1 m-0">Coordinates</h5>
+            <p class="w-full sm:w-28 m-0 sm:text-right text-sm">
+              {{ selLoc ? selLoc.coordinates_view : '---' }}
             </p>
           </div>
 
           <div class="flex flex-col sm:flex-row sm:justify-between">
-            <h5 class="w-28 m-0">Topography</h5>
-            <p class="m-0 sm:text-right text-sm">
+            <h5 class="flex-1 m-0">Topography</h5>
+            <p class="w-full sm:w-28 m-0 sm:text-right text-sm">
               {{ selLoc ? selLoc.topography : '---' }}
             </p>
           </div>
 
           <div class="flex flex-col sm:flex-row sm:justify-between">
-            <h5 class="w-28 m-0">Altitude</h5>
-            <p class="m-0 sm:text-right text-sm">
+            <h5 class="flex-1 m-0">Altitude</h5>
+            <p class="w-full sm:w-28 m-0 sm:text-right text-sm">
               {{ selLoc ? selLoc.altitude : '---' }} m.
             </p>
           </div>
 
           <div class="flex flex-col sm:flex-row sm:justify-between">
-            <h5 class="w-28 m-0">Temperature</h5>
-            <p class="m-0 sm:text-right text-sm">
+            <h5 class="flex-1 m-0">Temperature</h5>
+            <p class="w-full sm:w-28 m-0 sm:text-right text-sm">
               {{ selLoc ? selLoc.temperature : '---' }} ℃
             </p>
           </div>
 
           <div class="flex flex-col sm:flex-row sm:justify-between">
-            <h5 class="w-28 m-0">Location</h5>
-            <p class="m-0 sm:text-right text-sm">
+            <h5 class="flex-1 m-0">Landing Zone</h5>
+            <p class="w-full sm:w-28 m-0 sm:text-right text-sm">
               {{ selLoc ? selLoc.named_location : '---' }}
             </p>
           </div>
+
+          <div class="flex flex-col sm:flex-row sm:justify-between">
+            <h5 class="flex-1 m-0">Difficulty</h5>
+            <p class="m-0 sm:text-right text-sm">
+              {{ selLoc ? selLoc.difficulty : '---' }}
+            </p>
+          </div>
+
+          <section class="grid grid-cols-2 gap-4">
+            <div class="col-span-2 sm:col-span-1">
+              <div class="flex flex-col sm:flex-row py-2">
+                <h4 class="flex-1 m-0 text-center underline">Resources</h4>
+              </div>
+
+              <div class="flex flex-col sm:flex-row sm:justify-between">
+                <h5 class="flex-1 m-0">Metals & Rare Metals</h5>
+                <p class="w-full sm:w-4 m-0 sm:text-right text-sm font-medium">
+                  {{ selLoc ? selLoc.metals : '---' }}
+                </p>
+              </div>
+
+              <div class="flex flex-col sm:flex-row sm:justify-between">
+                <h5 class="flex-1 m-0">Concrete</h5>
+                <p class="w-full sm:w-4 m-0 sm:text-right text-sm font-medium">
+                  {{ selLoc ? selLoc.concrete : '---' }}
+                </p>
+              </div>
+
+              <div class="flex flex-col sm:flex-row sm:justify-between">
+                <h5 class="w-28 m-0">Water</h5>
+                <p class="w-full sm:w-4 m-0 sm:text-right text-sm font-medium">
+                  {{ selLoc ? selLoc.water : '---' }}
+                </p>
+              </div>
+            </div>
+
+            <div class="col-span-2 sm:col-span-1">
+              <div class="flex flex-col sm:flex-row py-2">
+                <h4 class="flex-1 m-0 text-center underline">Disasters</h4>
+              </div>
+
+              <div class="flex flex-col sm:flex-row sm:justify-between">
+                <h5 class="flex-1 m-0">Dust Devils</h5>
+                <p class="w-full sm:w-4 m-0 sm:text-right text-sm font-medium">
+                  {{ selLoc ? selLoc.dust_devils : '---' }}
+                </p>
+              </div>
+
+              <div class="flex flex-col sm:flex-row sm:justify-between">
+                <h5 class="flex-1 m-0">Dust Storm</h5>
+                <p class="w-full sm:w-4 m-0 sm:text-right text-sm font-medium">
+                  {{ selLoc ? selLoc.dust_storm : '---' }}
+                </p>
+              </div>
+
+              <div class="flex flex-col sm:flex-row sm:justify-between">
+                <h5 class="w-28 m-0">Meteors</h5>
+                <p class="w-full sm:w-4 m-0 sm:text-right text-sm font-medium">
+                  {{ selLoc ? selLoc.meteors : '---' }}
+                </p>
+              </div>
+
+              <div class="flex flex-col sm:flex-row sm:justify-between">
+                <h5 class="w-28 m-0">Cold Waves</h5>
+                <p class="w-full sm:w-4 m-0 sm:text-right text-sm font-medium">
+                  {{ selLoc ? selLoc.cold_waves : '---' }}
+                </p>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
 
@@ -229,7 +301,7 @@ type LandingLocationColDef =
   styles: [
     `
       .bt-list {
-        height: 380px;
+        height: 440px;
         overflow-y: auto;
       }
 
@@ -251,7 +323,7 @@ export class LandingLocationTableComponent {
   readonly colDefs: LandingLocationColDef[] = [
     {
       minWidth: 140,
-      field: 'coordinates',
+      field: 'coordinates_view',
       headerName: 'Coordinates',
       sortable: false,
       filter: true,
@@ -497,6 +569,7 @@ export class LandingLocationTableComponent {
       return {
         // coordinates: jr.Coordinates,
         coordinates: `${formattedLat}${jr.Latitude}:${formattedLong}${jr.Longitude}`,
+        coordinates_view: `${jr['Latitude °']}${jr.Latitude}${jr['Longitude °']}${jr.Longitude}`,
         latitude_deg: jr['Latitude °'],
         latitude: jr.Latitude,
         longitude_deg: jr['Longitude °'],
