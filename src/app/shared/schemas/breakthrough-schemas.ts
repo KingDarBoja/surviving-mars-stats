@@ -5,6 +5,9 @@ export type SurvivingMarsBreakthroughVersionId =
   | 'GREEN_PLANET'
   | 'BELOW_AND_BEYOND'
   | 'GP_BB'
+  | 'BASE_20'
+  | 'GP_20'
+  | 'BB_20'
   | 'GP_BB_20';
 
 export type SurvivingMarsBreakthroughVersionValue = {
@@ -36,6 +39,21 @@ export const SurvivingMarsBreakthroughVersions: Record<
     id: 'GP_BB',
     label: 'Green Planet + Below and Beyond DLCs',
     path: './data/MapData-Breakthroughs_GP-BB.csv',
+  },
+  BASE_20: {
+    id: 'BASE_20',
+    label: 'Base game (20 Breakthroughs)',
+    path: './data/MapData-Breakthroughs_20.csv',
+  },
+  GP_20: {
+    id: 'GP_20',
+    label: 'Green Planet DLC (20 Breakthroughs)',
+    path: './data/MapData-Breakthroughs_GP_20.csv',
+  },
+  BB_20: {
+    id: 'BB_20',
+    label: 'Below and Beyond DLC (20 Breakthroughs)',
+    path: './data/MapData-Breakthroughs_BB_20.csv',
   },
   GP_BB_20: {
     id: 'GP_BB_20',
