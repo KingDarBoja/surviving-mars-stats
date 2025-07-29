@@ -12,6 +12,7 @@ import atmosphereVertexShader from '../../assets/shaders/atmosphere/atmosphereVe
 import {
   AdditiveBlending,
   BackSide,
+  GLSL3,
   Mesh,
   ShaderMaterial,
   ShaderMaterialParameters,
@@ -49,6 +50,7 @@ export class MarsAtmosphereMeshComponent {
 
   /** */
   protected atmosphereShaderParameters: ShaderMaterialParameters = {
+    glslVersion: GLSL3,
     vertexShader: atmosphereVertexShader,
     fragmentShader: atmosphereFragmentShader,
     side: BackSide,

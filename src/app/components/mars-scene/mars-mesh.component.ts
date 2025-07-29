@@ -15,6 +15,7 @@ import {
 import { textureResource } from 'angular-three-soba/loaders';
 import {
   DoubleSide,
+  GLSL3,
   Mesh,
   MeshStandardMaterial,
   MeshStandardMaterialParameters,
@@ -133,6 +134,7 @@ export class MarsMeshComponent {
 
   /** */
   protected marsShaderParameters: ShaderMaterialParameters = {
+    glslVersion: GLSL3,
     vertexShader: marsVertexShader,
     fragmentShader: marsFragmentShader,
     side: DoubleSide,

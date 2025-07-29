@@ -1,5 +1,5 @@
 // Variables to pass to the fragment shader.
-varying vec3 vertexNormal;
+out vec3 vertexNormal;
 
 void main() {
   vertexNormal = normalize(normalMatrix * normal);
