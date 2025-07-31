@@ -14,6 +14,7 @@ import {
 } from 'angular-three';
 import { textureResource } from 'angular-three-soba/loaders';
 import {
+  BackSide,
   DoubleSide,
   GLSL3,
   Mesh,
@@ -37,7 +38,7 @@ extend({ Mesh, SphereGeometry, MeshStandardMaterial, ShaderMaterial });
   standalone: true,
   template: `
     <!-- This mesh allows shadows from the directional light. -->
-    <ngt-mesh [position]="[0, 0, 0]" castShadow>
+    <ngt-mesh [position]="[0, 0, 0]" receiveShadow>
       <ngt-sphere-geometry *args="overlayGeoArgs" />
       <ngt-mesh-standard-material [parameters]="overlayMatParams" />
     </ngt-mesh>
@@ -51,9 +52,9 @@ extend({ Mesh, SphereGeometry, MeshStandardMaterial, ShaderMaterial });
       @let _textures = marsTextures.value();
       <!-- @let map = _textures?.map;
       @let normalMap = _textures?.normalMap;
-      @let bumpMap = _textures?.bumpMap; -->
+      @let bumpMap = _textures?.bumpMap;
 
-      <!-- <ngt-mesh-standard-material
+      <ngt-mesh-standard-material
         [map]="map"
         [normalMap]="normalMap"
         [bumpMap]="bumpMap"
@@ -84,7 +85,7 @@ export class MarsMeshComponent {
 
   /** Height and width segments. */
   private readonly sphereSegments = 64;
-  private readonly sphereRadius = 8;
+  private readonly sphereRadius = 6.8;
 
   /**
    * Geometry arguments, in this case: [radius, widthSegments,
@@ -101,7 +102,7 @@ export class MarsMeshComponent {
    * radius to overlay.
    */
   protected overlayGeoArgs: ConstructorParameters<typeof SphereGeometry> = [
-    this.sphereRadius + 0.05,
+    this.sphereRadius + 0.05, // Offset it so it doesn't overlap the below mesh.
     this.sphereSegments,
     this.sphereSegments,
   ];
@@ -132,11 +133,20 @@ export class MarsMeshComponent {
     normalMap: './textures/mars_4k_normal.jpg',
   }));
 
+  /** Used at the commented code to check the differences. */
+  protected meshMatParams: MeshStandardMaterialParameters = {
+    color: 0xbd5417,
+    wireframe: false,
+    opacity: 1,
+    transparent: false,
+  }
+
   /** */
   protected marsShaderParameters: ShaderMaterialParameters = {
     glslVersion: GLSL3,
     vertexShader: marsVertexShader,
     fragmentShader: marsFragmentShader,
+    shadowSide: BackSide,
     side: DoubleSide,
     uniforms: {
       /**
@@ -172,7 +182,9 @@ export class MarsMeshComponent {
    */
   private animate() {
     const sphereMeshEl = this.meshRef().nativeElement;
-    sphereMeshEl.rotateY(0.0002);
+    /** Uncomment to enable planet rotation on its axis. */
+    // sphereMeshEl.rotateY(0.0004);
+    sphereMeshEl.rotateY(0.00007) // True rate of rotation in radians per sec
   }
 
   /**

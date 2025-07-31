@@ -1,9 +1,8 @@
 /* Variables shared from a vertex shader to a fragment shader. */
-varying vec3 vertexNormal;
+in vec3 vertexNormal;
 
-/* Declare an output variable for the fragment color.
-   This replaces the deprecated 'gl_FragColor' in GLSL ES 3.0.
-*/
+/* Declare an output variable for the fragment color. This replaces the
+deprecated 'gl_FragColor' in GLSL ES 3.0. */
 out vec4 FragColor;
 
 void main() {

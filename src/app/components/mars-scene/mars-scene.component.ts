@@ -4,13 +4,18 @@ import {
   ElementRef,
   viewChild,
 } from '@angular/core';
-import { beforeRender, extend, NgtArgs, NgtVector3 } from 'angular-three';
+import { KeyValuePipe } from '@angular/common';
+import { beforeRender, extend, is, NgtArgs, NgtVector3 } from 'angular-three';
 import { gltfResource } from 'angular-three-soba/loaders';
+import { helper } from 'angular-three-soba/abstractions';
 
 import {
   AxesHelper,
+  CameraHelper,
   Color,
+  ColorRepresentation,
   DirectionalLight,
+  DirectionalLightHelper,
   Group,
   HemisphereLight,
   IcosahedronGeometry,
@@ -19,15 +24,20 @@ import {
   MeshStandardMaterialParameters,
   SphereGeometry,
 } from 'three';
+import { GLTF } from 'three-stdlib';
+
+import phobosMoonGLB from '../../assets/glb/NASA_Phobos.glb' with { loader: 'file' };
+import deimosMoonGLB from '../../assets/glb/NASA_Deimos.glb' with { loader: 'file' };
+
 import { MarsMeshComponent } from './mars-mesh.component';
 import { MarsAtmosphereMeshComponent } from './mars-atmosphere-mesh.component';
-
-import phobosMoon from '../../assets/glb/NASA_Phobos.glb' with { loader: 'file' };
 
 extend({
   Color,
   Group,
   DirectionalLight,
+  DirectionalLightHelper,
+  CameraHelper,
   HemisphereLight,
   Mesh,
   IcosahedronGeometry,
@@ -45,47 +55,60 @@ extend({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   standalone: true,
   imports: [
+    KeyValuePipe,
     NgtArgs,
     MarsMeshComponent,
     MarsAtmosphereMeshComponent,
   ],
   template: `
     <ngt-color attach="background" *args="sceneColorArgs" />
+
     <ngt-directional-light
       *args="sunLightArgs"
       [position]="sunLightPosition"
       castShadow
-    />
+      #sunLight
+    >
+      @for (prop of sunLightShadowCamera | keyvalue; track prop.key) {
+        <ngt-value
+          [attach]="['shadow', 'camera', prop.key]"
+          [rawValue]="prop.value"
+        />
+      }
+    </ngt-directional-light>
+
     <!-- <ngt-hemisphere-light *args="hemiLightArgs" /> -->
 
     <!-- <ngt-axes-helper *args="[20]" /> -->
-
-    <ngt-group #marsOrbitGroup>
-      <ngt-group #phobosOrbitGroup>
-        <ngt-primitive
-          *args="[gltfPhobos.scene()]"
-          [parameters]="{ scale: 0.08 }"
-          [position]="phobosPosition"
-          receiveShadow
-        />
-
-        <ngt-mesh #phobosMesh [position]="phobosPosition" receiveShadow>
-          <ngt-icosahedron-geometry *args="phobosGeoArgs" />
-          <ngt-mesh-standard-material [parameters]="phobosMatParams" />
-        </ngt-mesh>
-      </ngt-group>
-
-      <ngt-group #deimosOrbitGroup>
-        <ngt-mesh #deimosMesh [position]="deimosPosition" receiveShadow>
-          <ngt-sphere-geometry *args="deimosGeoArgs" />
-          <ngt-mesh-standard-material [parameters]="deimosMatParams" />
-        </ngt-mesh>
-      </ngt-group>
-    </ngt-group>
-
     <ngt-group #marsPlanetGroup>
       <sms-mars-mesh />
       <sms-atmosphere-mesh />
+    </ngt-group>
+
+    <ngt-group #marsOrbitGroup>
+      <ngt-group #phobosOrbitGroup>
+        <ngt-mesh #phobosMesh [position]="phobosPosition">
+          <!-- <ngt-axes-helper *args="[5]" /> -->
+          <ngt-primitive *args="[gltfPhobos.scene()]" />
+        </ngt-mesh>
+
+        <!-- <ngt-mesh #phobosMesh [position]="phobosPosition" receiveShadow>
+          <ngt-icosahedron-geometry *args="phobosGeoArgs" />
+          <ngt-mesh-standard-material [parameters]="phobosMatParams" />
+        </ngt-mesh> -->
+      </ngt-group>
+
+      <ngt-group #deimosOrbitGroup>
+        <ngt-mesh #deimosMesh [position]="deimosPosition">
+          <!-- <ngt-axes-helper *args="[5]" /> -->
+          <ngt-primitive *args="[gltfDeimos.scene()]" />
+        </ngt-mesh>
+
+        <!-- <ngt-mesh #deimosMesh [position]="deimosPosition" receiveShadow>
+          <ngt-sphere-geometry *args="deimosGeoArgs" />
+          <ngt-mesh-standard-material [parameters]="deimosMatParams" />
+        </ngt-mesh> -->
+      </ngt-group>
     </ngt-group>
   `,
 })
@@ -104,34 +127,105 @@ export class MarsScene {
 
   /* -------------------- LIGHTING CONFIG -------------------- */
 
+  /** Pass a warm color to both light elements. */
   protected hemiLightArgs: ConstructorParameters<typeof HemisphereLight> = [
-    0xffffff, 0x808080,
+    0xffddaa, 0x808080,
   ];
+  /** Pass a warm color to both light elements. */
   protected sunLightArgs: ConstructorParameters<typeof DirectionalLight> = [
-    0xffffff, 18,
+    0xffddaa, 18,
   ];
-  protected sunLightPosition: NgtVector3 = [-22, 0, 22];
+  protected sunLightPosition: NgtVector3 = [-16, 0, 10];
+  protected sunLightShadowCamera = {
+    left: -20,
+    right: 20,
+    top: 20,
+    bottom: -20,
+    near: 1,
+    far: 60,
+  };
 
-  /* -------------------- OTHER MESHES CONFIG -------------------- */
-  protected gltfPhobos = gltfResource(() => phobosMoon);
+  sunLight = viewChild<ElementRef<DirectionalLight>>('sunLight');
 
+  /** Uncomment to display the directional light helper. */
+  // sunLightHelper = helper(this.sunLight, () => DirectionalLightHelper, {
+  //   args: () => [5, '#FFFFFF'] as [number, ColorRepresentation],
+  // });
+
+  /** Uncomment to display the directional light shadow frustum. */
+  // sunLightCameraShadowHelper = helper(
+  //   () => this.sunLight()?.nativeElement.shadow.camera,
+  //   () => CameraHelper,
+  //   {},
+  // );
+
+  /* -------------------- SATELLITE MESHES CONFIG -------------------- */
+
+  /** 
+   * The position is shared with the example geometry and the gltf files. The
+   * real distance from Mars surface to Phobos orbit is roughly 6000 km.
+   */
+  protected phobosPosition: NgtVector3 = [-10, 1, 0];
   protected phobosGeoArgs: ConstructorParameters<typeof IcosahedronGeometry> = [
-    0.5, 5,
+    0.1, 2,
   ];
-  protected phobosPosition: NgtVector3 = [12, 4, 0];
   protected phobosMatParams: MeshStandardMaterialParameters = {
     color: 0xff9d6f, // Atomic tangerine
     wireframe: false,
   };
 
-  protected deimosGeoArgs: ConstructorParameters<typeof SphereGeometry> = [
-    0.2, 8, 8,
-  ];
+  /** 
+   * The position is shared with the example geometry and the gltf files. The
+   * real distance from Mars surface to Deimos orbit is roughly 23400 km.
+   */
   protected deimosPosition: NgtVector3 = [10, -2, 0];
+  protected deimosGeoArgs: ConstructorParameters<typeof SphereGeometry> = [
+    0.5, 14, 14,
+  ];
   protected deimosMatParams: MeshStandardMaterialParameters = {
     color: 0x107e57, // Green-like
     wireframe: false,
   };
+
+  /* -------------------- GLTF LOADING -------------------- */
+
+  /** 
+   * AFAIK, both gltf share the same scale. As mars size in reality is roughly
+   * 6800 meters and its satellites are roughly 22 km (Phobos) and 12 km
+   * (Deimos), those would look too tiny in the rendered scene. So used the
+   * scale of 0.016 for a decent visualization of Mars Moon's. 
+   */
+  private readonly gltfCommonConfig = { scale: 0.016 };
+
+  /** */
+  protected gltfPhobos = gltfResource<GLTF>(() => phobosMoonGLB, {
+    onLoad: (node) => {
+      const model = node.scene;
+
+      model.scale.setScalar(this.gltfCommonConfig.scale);
+      model.traverse((child) => {
+        if (is.object3D(child)) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
+      });
+    },
+  });
+
+  /** */
+  protected gltfDeimos = gltfResource<GLTF>(() => deimosMoonGLB, {
+    onLoad: (node) => {
+      const model = node.scene;
+
+      model.scale.setScalar(this.gltfCommonConfig.scale);
+      model.traverse((child) => {
+        if (is.object3D(child)) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
+      });
+    },
+  });
 
   /* -------------------- ANIMATION CONFIG -------------------- */
 
@@ -171,12 +265,20 @@ export class MarsScene {
 
     /** The tilt angle. */
     marsPlanetGroupEl.rotation.z = this._marsTiltAngle;
-    /** Add the rotation around the planet orbit. */
+    /**
+     * Add the rotation around the planet orbit. We use a random rotation rate,
+     * where the real rotation in radians is commented (If calculations aren't
+     * wrong ofc lol).
+     */
     phobosOrbitGroupEl.rotateY(0.004);
-    deimosOrbitGroupEl.rotateY(0.007);
+    deimosOrbitGroupEl.rotateY(0.001);
+    // phobosOrbitGroupEl.rotateY(0.000228) // Real orbital rotation in radians.
+    // deimosOrbitGroupEl.rotateY(0.0000575) // Real orbital rotation in radians.
     /** We add rotation for Phobos moon. */
     phobosMeshEl.rotateY(0.004);
+    phobosMeshEl.rotateX(0.002);
     /** And do the same for Deimos moon. */
     deimosMeshEl.rotateY(0.002);
+    deimosMeshEl.rotateX(0.005);
   }
 }

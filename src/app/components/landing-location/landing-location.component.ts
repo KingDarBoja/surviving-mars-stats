@@ -11,7 +11,7 @@ import { MarsScene } from '../mars-scene/mars-scene.component';
   selector: 'sms-landing-location',
   template: `
     <section class="flex flex-col gap-8">
-      <!-- <div id="canvas-container">
+      <div id="canvas-container">
         <ngt-canvas
           [camera]="canvasCamera"
           [lookAt]="canvasLookAt"
@@ -20,7 +20,7 @@ import { MarsScene } from '../mars-scene/mars-scene.component';
         >
           <sms-mars-scene *canvasContent />
         </ngt-canvas>
-      </div> -->
+      </div>
 
       <sms-landing-location-table />
     </section>
@@ -36,7 +36,7 @@ import { MarsScene } from '../mars-scene/mars-scene.component';
 })
 export class LandingLocationComponent {
   protected canvasCamera: NgtCameraParameters = {
-    position: [0, 0, 20],
+    position: [0, 0, 16],
   };
   protected canvasLookAt: NgtVector3 = [0, 0, 0];
 }

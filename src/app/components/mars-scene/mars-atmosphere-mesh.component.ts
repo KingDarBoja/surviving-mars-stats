@@ -45,7 +45,7 @@ export class MarsAtmosphereMeshComponent {
    * heightSegments].
    */
   protected geometryArgs: ConstructorParameters<typeof SphereGeometry> = [
-    8, 64, 64,
+    6.8, 64, 64,
   ];
 
   /** */
@@ -55,6 +55,7 @@ export class MarsAtmosphereMeshComponent {
     fragmentShader: atmosphereFragmentShader,
     side: BackSide,
     blending: AdditiveBlending,
+    transparent: true,
   };
 
   /** Obtain the mesh reference with `viewChild` signal. */
@@ -74,6 +75,6 @@ export class MarsAtmosphereMeshComponent {
    */
   private animate() {
     const atmosphereMeshEl = this.meshRef().nativeElement;
-    atmosphereMeshEl.scale.set(1.1, 1.1, 1.1);
+    atmosphereMeshEl.scale.set(1.25, 1.25, 1.25);
   }
 }
