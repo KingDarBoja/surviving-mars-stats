@@ -56,6 +56,15 @@
       },
       "defaultConfiguration": "production"
     },
+    "deploy": {
+      "executor": "angular-cli-ghpages:deploy",
+      "options": {
+        "repo": "https://github.com/KingDarBoja/surviving-mars-stats.git",
+        "baseHref": "/surviving-mars-stats/",
+        "dir": "dist/surviving-mars-stats/browser",
+        "noNojekyll": true
+      }
+    },
     "serve": {
       "continuous": true,
       "executor": "@angular/build:dev-server",

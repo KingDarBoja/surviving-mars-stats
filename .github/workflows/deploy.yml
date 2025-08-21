@@ -23,15 +23,18 @@ jobs:
 
       - name: Install dependencies
         shell: bash
-        run: yarn install --forzen-lockfile
+        run: yarn install --frozen-lockfile
 
-      - name: Build the app
-        run: yarn nx run surviving-mars-stats:build:production
+      # - name: Build the app
+      #   run: yarn nx run surviving-mars-stats:build:production
 
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: gh-pages
-          folder: dist/surviving-mars-stats/browser
+      - name: Build & Deploy with angular-cli-ghpages 🚀
+        run: yarn nx run surviving-mars-stats:deploy
+
+      # - name: Deploy 🚀
+      #   uses: JamesIves/github-pages-deploy-action@v4
+      #   with:
+      #     branch: gh-pages
+      #     folder: dist/surviving-mars-stats/browser
 
     
