@@ -16,6 +16,10 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v5
 
+      - name: Setup git user to "🤖 Deploy Bot"
+        shell: bash
+        run: git config user.email "-" && git config user.name "🤖 Deploy Bot"
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:

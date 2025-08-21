@@ -62,9 +62,7 @@
         "repo": "https://github.com/KingDarBoja/surviving-mars-stats.git",
         "baseHref": "/surviving-mars-stats/",
         "dir": "dist/surviving-mars-stats/browser",
-        "noNojekyll": true,
-        "name": "KingDarBoja",
-        "email": "stevenbojato04@gmail.com"
+        "noNojekyll": true
       }
     },
     "serve": {
