@@ -6,15 +6,16 @@
         class="object-contain"
         [src]="logoUrl()"
         alt="Surviving Mars logo"
+        routerLink="./"
       />
       <span class="flex flex-1"></span>
 
       <div class="hidden sm:flex items-center justify-between">
-        <a matButton="filled" routerLink="vanilla" aria-label="FAQ">
+        <a matButton="filled" routerLink="vanilla" aria-label="vanilla">
           <mat-icon>planet</mat-icon>
           <span class="">Vanilla</span>
         </a>
-        <a matButton="filled" routerLink="relaunched" aria-label="FAQ">
+        <a matButton="filled" routerLink="relaunched" aria-label="relaunched">
           <mat-icon>construction</mat-icon>
           <span class="">Relaunched</span>
         </a>
@@ -43,11 +44,11 @@
 </mat-toolbar>
 
 <mat-menu #menu="matMenu">
-  <a mat-menu-item routerLink="vanilla" aria-label="FAQ">
+  <a mat-menu-item routerLink="vanilla" aria-label="vanilla">
     <mat-icon>planet</mat-icon>
     <span class="">Vanilla</span>
   </a>
-  <a mat-menu-item routerLink="relaunched" aria-label="FAQ">
+  <a mat-menu-item routerLink="relaunched" aria-label="relaunched">
     <mat-icon>construction</mat-icon>
     <span class="">Relaunched</span>
   </a>

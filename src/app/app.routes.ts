@@ -2,8 +2,13 @@ import { Route } from '@angular/router';
 import { VanillaLandingLocationComponent } from './pages/vanilla/vanilla.component';
 import { FaqComponent } from './pages/faq/faq.component';
 import { RelaunchedLandingLocationComponent } from './pages/relaunched/relaunched.component';
+import { WelcomeComponent } from './pages/welcome/welcome.component';
 
 export const appRoutes: Route[] = [
+  {
+    path: '',
+    component: WelcomeComponent,
+  },
   {
     path: 'vanilla',
     component: VanillaLandingLocationComponent,
@@ -18,7 +23,7 @@ export const appRoutes: Route[] = [
   },
   {
     path: '',
-    redirectTo: 'vanilla',
+    redirectTo: '',
     pathMatch: 'full',
   },
   {
