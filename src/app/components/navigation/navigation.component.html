@@ -1,20 +1,58 @@
 <mat-toolbar>
   <div class="container mx-auto">
     <div class="p-4 mx-4 flex items-center justify-between">
-      <span>Surviving Mars Stats</span>
+      <img
+        id="nav-logo"
+        class="object-contain"
+        [src]="logoUrl()"
+        alt="Surviving Mars logo"
+      />
       <span class="flex flex-1"></span>
-      <button matButton class="" aria-label="About">
-        <mat-icon>home</mat-icon>
-        <span class="">About</span>
-      </button>
-      <button matButton class="" aria-label="FAQ">
-        <mat-icon>info</mat-icon>
-        <span class="">FAQ</span>
-      </button>
-      <button matButton class="" aria-label="theme" (click)="toggleTheme()">
-        <mat-icon>{{ selectedTheme() === 'light' ? 'dark_mode' : 'light_mode' }}</mat-icon>
-      </button>
+
+      <div class="hidden sm:flex items-center justify-between">
+        <a matButton="filled" href="/vanilla" aria-label="FAQ">
+          <mat-icon>planet</mat-icon>
+          <span class="">Vanilla</span>
+        </a>
+        <a matButton="filled" href="/relaunched" aria-label="FAQ">
+          <mat-icon>construction</mat-icon>
+          <span class="">Relaunched</span>
+        </a>
+        <a matButton="filled" href="/faq" aria-label="FAQ">
+          <mat-icon>info</mat-icon>
+          <span class="">FAQ</span>
+        </a>
+        <button
+          matIconButton
+          aria-label="toggle button between light and dark theme"
+          (click)="toggleTheme()"
+        >
+          <mat-icon>{{
+            selectedTheme() === 'light' ? 'dark_mode' : 'light_mode'
+          }}</mat-icon>
+        </button>
+      </div>
+
+      <div class="sm:hidden">
+        <button matIconButton [matMenuTriggerFor]="menu">
+          <mat-icon>menu</mat-icon>
+        </button>
+      </div>
     </div>
   </div>
-
 </mat-toolbar>
+
+<mat-menu #menu="matMenu">
+  <a mat-menu-item href="/vanilla" aria-label="FAQ">
+    <mat-icon>planet</mat-icon>
+    <span class="">Vanilla</span>
+  </a>
+  <a mat-menu-item href="/relaunched" aria-label="FAQ">
+    <mat-icon>construction</mat-icon>
+    <span class="">Relaunched</span>
+  </a>
+  <a mat-menu-item href="/faq" aria-label="FAQ">
+    <mat-icon>info</mat-icon>
+    <span class="">FAQ</span>
+  </a>
+</mat-menu>

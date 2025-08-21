@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
+import { MatIconRegistry } from '@angular/material/icon';
 import { provideNgtRenderer } from 'angular-three/dom';
 import { lastValueFrom, tap } from 'rxjs';
 
@@ -39,6 +40,13 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     provideNgtRenderer(),
     provideAppInitializer(() => {
+      const iconRegistry = inject(MatIconRegistry);
+      const defaultFontSetClasses = iconRegistry.getDefaultFontSetClass();
+      const outlinedFontSetClasses = defaultFontSetClasses
+        .filter(fontSetClass => fontSetClass !== 'material-icons')
+        .concat(['material-symbols-outlined']);
+      iconRegistry.setDefaultFontSetClass(...outlinedFontSetClasses);
+
       return initializerLocaleFn();
     }),
   ],

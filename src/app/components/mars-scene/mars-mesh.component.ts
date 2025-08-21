@@ -194,8 +194,8 @@ export class MarsMeshComponent {
    * @param param0
    */
   onAttachSphere(event: NgtAfterAttach<SphereGeometry, Mesh>) {
-    const { parent, node } = event;
-    console.log('Sphere node: ', node);
-    console.log('Parent: ', parent);
+    // const { parent, node } = event;
+    // console.log('Sphere node: ', node);
+    // console.log('Parent: ', parent);
   }
 }
