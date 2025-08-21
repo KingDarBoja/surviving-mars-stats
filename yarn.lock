@@ -5193,10 +5193,10 @@ angular-eslint@^20.0.0:
     "@typescript-eslint/types" "^8.0.0"
     "@typescript-eslint/utils" "^8.0.0"
 
-angular-three-plugin@4.0.0-next.110:
-  version "4.0.0-next.110"
-  resolved "https://registry.yarnpkg.com/angular-three-plugin/-/angular-three-plugin-4.0.0-next.110.tgz#a3914c26a050819aa67036e8338b7572d7b840cb"
-  integrity sha512-+FKikcbZd8BwmC5KFD36KhFUpyQ0++jDYGwitwQ5ORISdnhLW+j9sSu5X0ZExSNC0FuZaA6jJOeRdmr254UFtA==
+angular-three-plugin@4.0.0-next.115:
+  version "4.0.0-next.115"
+  resolved "https://registry.yarnpkg.com/angular-three-plugin/-/angular-three-plugin-4.0.0-next.115.tgz#5fc6324e24938b32703dfcdc8cb8b033e41c45df"
+  integrity sha512-Ppz+PLgIQabhSKJbm1aIsec8DbyJdjqkzePZzDqaFpVTw7ln1YU7O19TjRbI/5z01fPlfK8kGu7pKXRcoalTXg==
   dependencies:
     "@nx/devkit" "^21.0.0"
     "@rosskevin/gltfjsx" "^7.0.0"
@@ -5205,17 +5205,17 @@ angular-three-plugin@4.0.0-next.110:
     ts-morph "^25.0.0"
     tslib "^2.3.0"
 
-angular-three-soba@4.0.0-next.110:
-  version "4.0.0-next.110"
-  resolved "https://registry.yarnpkg.com/angular-three-soba/-/angular-three-soba-4.0.0-next.110.tgz#35b8c75e8c454f1a9c3aa7baf54cd4c9cf78898f"
-  integrity sha512-5aAilc39v2IahPsvvQtTHtb7kZofuxoAGB+O/LJr9crTkI3GWLPpFLVIRWLBIlPGzirfbOY1Sq1Rj31Kr8FdjA==
+angular-three-soba@4.0.0-next.115:
+  version "4.0.0-next.115"
+  resolved "https://registry.yarnpkg.com/angular-three-soba/-/angular-three-soba-4.0.0-next.115.tgz#852cae64d4750982c32d38caa58fd0ef456044c2"
+  integrity sha512-yyY3GtPQ9FNgXCtStmimjpyOd6DC2a8WYL+P6YK0wTNuviNrzVGvJHyafwK8Zf1u4/pXJDUnz0oS813RKOUJCg==
   dependencies:
     tslib "^2.3.0"
 
-angular-three@4.0.0-next.110:
-  version "4.0.0-next.110"
-  resolved "https://registry.yarnpkg.com/angular-three/-/angular-three-4.0.0-next.110.tgz#ec299640b6ea71719aea9d12618d1194e5242bbd"
-  integrity sha512-As1tn2J4llOsmUx+Q6uxBBUijdHB+tQEvRKwkHEt95wCUHgaabJUhf4xKxTq80buKURIV3q76dfO801jRQvIEw==
+angular-three@4.0.0-next.115:
+  version "4.0.0-next.115"
+  resolved "https://registry.yarnpkg.com/angular-three/-/angular-three-4.0.0-next.115.tgz#cb450ef9457caf1121523f7add80412f7ad58d81"
+  integrity sha512-WXE5FP6oFV3Dxivc8CjTcM/NBG9pQ+yVeS0yzn7k+CpvkhegfxLr8LTr9jvKzULHdbOqAXkhMA+NLIpZbvmzsQ==
   dependencies:
     tslib "^2.7.0"
 
