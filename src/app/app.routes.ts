@@ -17,8 +17,12 @@ export const appRoutes: Route[] = [
     component: FaqComponent,
   },
   {
-		path: '**',
-		redirectTo: '/vanilla',
-		pathMatch: 'full',
-	},
+    path: '',
+    redirectTo: 'vanilla',
+    pathMatch: 'full',
+  },
+  {
+    path: '**',
+    redirectTo: '',
+  },
 ];

@@ -10,15 +10,15 @@
       <span class="flex flex-1"></span>
 
       <div class="hidden sm:flex items-center justify-between">
-        <a matButton="filled" href="/vanilla" aria-label="FAQ">
+        <a matButton="filled" routerLink="vanilla" aria-label="FAQ">
           <mat-icon>planet</mat-icon>
           <span class="">Vanilla</span>
         </a>
-        <a matButton="filled" href="/relaunched" aria-label="FAQ">
+        <a matButton="filled" routerLink="relaunched" aria-label="FAQ">
           <mat-icon>construction</mat-icon>
           <span class="">Relaunched</span>
         </a>
-        <a matButton="filled" href="/faq" aria-label="FAQ">
+        <a matButton="filled" routerLink="faq" aria-label="FAQ">
           <mat-icon>info</mat-icon>
           <span class="">FAQ</span>
         </a>
@@ -43,15 +43,15 @@
 </mat-toolbar>
 
 <mat-menu #menu="matMenu">
-  <a mat-menu-item href="/vanilla" aria-label="FAQ">
+  <a mat-menu-item routerLink="vanilla" aria-label="FAQ">
     <mat-icon>planet</mat-icon>
     <span class="">Vanilla</span>
   </a>
-  <a mat-menu-item href="/relaunched" aria-label="FAQ">
+  <a mat-menu-item routerLink="relaunched" aria-label="FAQ">
     <mat-icon>construction</mat-icon>
     <span class="">Relaunched</span>
   </a>
-  <a mat-menu-item href="/faq" aria-label="FAQ">
+  <a mat-menu-item routerLink="faq" aria-label="FAQ">
     <mat-icon>info</mat-icon>
     <span class="">FAQ</span>
   </a>

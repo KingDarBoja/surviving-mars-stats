@@ -3,19 +3,25 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter, tap } from 'rxjs';
 
 type Theme = 'dark' | 'light';
 
 enum LogoUrl {
-  VANILLA = '/icons/official/vanilla_logo_base.png',
-  RELAUNCHED = '/icons/official/relaunched_logo_base.png',
+  VANILLA = 'icons/official/vanilla_logo_base.png',
+  RELAUNCHED = 'icons/official/relaunched_logo_base.png',
 }
 
 @Component({
   standalone: true,
-  imports: [MatButtonModule, MatMenuModule, MatToolbarModule, MatIconModule],
+  imports: [
+    MatButtonModule,
+    MatMenuModule,
+    MatToolbarModule,
+    MatIconModule,
+    RouterLink,
+  ],
   selector: 'sms-navigation-bar',
   templateUrl: 'navigation.component.html',
   styles: [
@@ -37,16 +43,20 @@ export class NavigationComponent {
     const storedTheme = this.getThemeInLocalStorage();
     this.setTheme(storedTheme);
 
-    this._router.events.pipe(
-      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-      tap((event) => {
-        if (event.url === '/relaunched') {
-          this.logoUrl.set(LogoUrl.RELAUNCHED);
-        } else {
-          this.logoUrl.set(LogoUrl.VANILLA);
-        }
-      })
-    ).subscribe()
+    this._router.events
+      .pipe(
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd,
+        ),
+        tap((event) => {
+          if (event.url === '/relaunched') {
+            this.logoUrl.set(LogoUrl.RELAUNCHED);
+          } else {
+            this.logoUrl.set(LogoUrl.VANILLA);
+          }
+        }),
+      )
+      .subscribe();
   }
 
   toggleTheme() {
